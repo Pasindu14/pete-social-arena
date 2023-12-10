@@ -1,9 +1,68 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { UserButton } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import AddPost from "./AddPost";
+import Loader from "@/components/common/Loader";
+import { loaderColor } from "@/constants/colors";
+import secureLocalStorage from "react-secure-storage";
+import { updateUser } from "@/lib/server-actions/user-actions";
+import toast from "react-hot-toast";
+import { getUserId, setCookie, setUserId } from "@/lib/utils";
+import { set } from "mongoose";
 
-const Header = () => {
+interface HeaderProps {
+  userId: string;
+  email: string;
+  fullName: string;
+  profilePictureUrl: string;
+  bio: string;
+}
+
+const Header = ({
+  userId,
+  email,
+  fullName,
+  profilePictureUrl,
+  bio,
+}: HeaderProps) => {
+  const user = getUserId();
+  console.log(user);
+  /// handle signin to DB
+  useEffect(() => {
+    const handleUserUpdate = async () => {
+      // secureLocalStorage.setItem("isUserSetInDB", false);
+      let value = secureLocalStorage.getItem("isUserSetInDB");
+      const asadsd = "asdasd";
+
+      /*      if (value === "true") {
+        return;
+      } */
+
+      try {
+        const data = await updateUser(
+          userId,
+          email,
+          fullName,
+          profilePictureUrl,
+          bio
+        );
+        if (data?.status === "error") {
+          toast.error("Oops! Something went wrong. Please try again !");
+        } else {
+          console.log("data id" + data?.data!);
+          setCookie("isUserSetInDB", true);
+          setUserId(data?.data!);
+        }
+      } catch (error) {
+        toast.error("Oops! Something went wrong. Please try again !");
+      }
+    };
+
+    // Call the async function
+    handleUserUpdate();
+  }, [userId, email, fullName, profilePictureUrl, bio]);
+
   return (
     <div className="flex gap-2 items-center justify-center">
       <div className="relative lg:w-1/2">
@@ -27,7 +86,13 @@ const Header = () => {
       <div className="flex flex-row justify-between items-center">
         <AddPost />
       </div>
-      <UserButton />
+
+      <ClerkLoading>
+        <Loader size={25} color={loaderColor} />
+      </ClerkLoading>
+      <ClerkLoaded>
+        <UserButton />
+      </ClerkLoaded>
     </div>
   );
 };

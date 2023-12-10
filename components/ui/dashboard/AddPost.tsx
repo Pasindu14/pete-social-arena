@@ -15,13 +15,27 @@ import { Image, UploadCloud } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import Dropzone from "react-dropzone";
 import { primaryColor } from "@/constants/colors";
+import { createPost } from "@/lib/server-actions/post-actions";
+import { currentUser, useUser } from "@clerk/nextjs";
 
 const AddPost = () => {
+  const { user } = useUser();
   const onDrop = useCallback((acceptedFiles: any) => {
     console.log(acceptedFiles);
   }, []);
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<File[]>();
+
+  const submitPost = async () => {
+    const data = {
+      authorId: user?.id!,
+      contentType: "image",
+      content: "asdassad",
+      caption: "asdassad",
+    };
+    createPost(data);
+  };
+
   return (
     <div>
       <Dialog>
@@ -72,7 +86,9 @@ const AddPost = () => {
             </Button>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" onClick={() => submitPost()}>
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
-import { Heebo } from "next/font/google";
-import "../globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Bebas_Neue, Heebo } from "next/font/google";
+import "../globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import Footer from "@/components/common/Footer";
-import { Toaster } from "react-hot-toast";
+import { primaryColor } from "@/constants/colors";
+import Image from "next/image";
+import { bebas, heebo } from "@/constants/fonts";
 
-const heebo = Heebo({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "Pete's Social Arena",
   description: "Pete's Social Arena",
 };
@@ -30,9 +28,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <Footer />
           </ThemeProvider>
-          <Toaster />
         </body>
       </html>
     </ClerkProvider>

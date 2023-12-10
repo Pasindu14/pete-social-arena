@@ -1,42 +1,51 @@
 "use server";
 
 import User from "../models/user.model";
-import { revalidatePath } from "next/cache";
-import { connectToDatabase } from "../mongooese";
-import { cookies } from "next/headers";
+import { connectToDB } from "../mongooese";
 
 export async function updateUser(
   userId: string,
-  username: string,
-  name: string,
-  bio: string,
-  image: string,
-  path: string
-): Promise<void> {
-  connectToDatabase();
-
-  cookies().set("name", userId);
+  email: string,
+  fullName: string,
+  profilePictureUrl: string,
+  bio: string
+) {
+  connectToDB();
 
   try {
-    await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       { id: userId },
       {
-        username: username.toLowerCase(),
-        name,
-        bio,
-        image,
-        path,
-        onboard: true,
+        id: userId,
+        email: email,
+        full_name: fullName,
+        profile_picture_url: profilePictureUrl,
+        bio: bio,
       },
       {
         upsert: true,
+        new: true,
       }
     );
 
-    /*     if (path === "/profile/edit") {
-      revalidatePath(path);
-    } */
+    return {
+      status: "success",
+      message: "User updated successfully",
+      data: user?._id?.toString(),
+    };
   } catch (error: any) {
-    throw new Error(`Failed to create/update user: ${error.message}`);
+    return {
+      status: "error",
+      message: `Failed to update user: ${error.message}`,
+    };
+  }
+}
+
+export async function fetchUser(userId: string) {
+  try {
+    connectToDB();
+    return await User.findOne({ id: userId });
+  } catch (error) {
+    throw new Error(`Failed to fetch user: ${error}`);
   }
 }
