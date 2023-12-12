@@ -1,6 +1,7 @@
 import Header from "@/components/ui/dashboard/Header";
 import React from "react";
 import { currentUser } from "@clerk/nextjs";
+import Feed from "@/components/ui/dashboard/Feed";
 
 const Page = async () => {
   const user = await currentUser();
@@ -14,6 +15,8 @@ const Page = async () => {
         profilePictureUrl={user?.imageUrl!}
         bio=""
       />
+
+      <Feed />
     </div>
   );
 };

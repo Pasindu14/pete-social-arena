@@ -10,9 +10,9 @@ export const setUserId = (userId: string) => {
   secureLocalStorage.setItem("_userId", userId);
 }
 
-export const getUserId = () => {
-  return secureLocalStorage.getItem("_userId");
-}
+export const getUserId = (): string | null => {
+  return secureLocalStorage.getItem("_userId")?.toString() ?? null;
+};
 
 export const setCookie = (name: string, value: any) => {
   return secureLocalStorage.setItem(name, value);

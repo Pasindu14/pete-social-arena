@@ -27,17 +27,13 @@ const Header = ({
   bio,
 }: HeaderProps) => {
   const user = getUserId();
-  console.log(user);
   /// handle signin to DB
   useEffect(() => {
     const handleUserUpdate = async () => {
-      // secureLocalStorage.setItem("isUserSetInDB", false);
-      let value = secureLocalStorage.getItem("isUserSetInDB");
-      const asadsd = "asdasd";
-
-      /*      if (value === "true") {
+      let user = getUserId();
+      if (user !== null) {
         return;
-      } */
+      }
 
       try {
         const data = await updateUser(
@@ -50,7 +46,6 @@ const Header = ({
         if (data?.status === "error") {
           toast.error("Oops! Something went wrong. Please try again !");
         } else {
-          console.log("data id" + data?.data!);
           setCookie("isUserSetInDB", true);
           setUserId(data?.data!);
         }

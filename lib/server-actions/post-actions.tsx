@@ -7,29 +7,26 @@ import { connectToDB } from "../mongooese";
 interface PostParams {
   authorId: string;
   contentType: string | null;
-  content: string;
-  caption: string | null;
+  imageUrl: string | null;
+  status: string;
 }
 
 export async function createPost({
   authorId,
   contentType,
-  content,
-  caption,
+  imageUrl,
+  status,
 }: PostParams) {
   try {
     connectToDB();
-
-    console.log(authorId);
     const createdPost = await Post.create({
       author_id: authorId,
       content_type: contentType,
-      content: content,
-      caption: caption,
+      image_url: imageUrl,
+      status: status,
     });
-
     await User.findByIdAndUpdate(authorId, {
-      $push: { threads: createdPost._id },
+      $push: { posts: createdPost._id },
     });
   } catch (error) {
     throw new Error(`Failed to create post: ${error}`);
