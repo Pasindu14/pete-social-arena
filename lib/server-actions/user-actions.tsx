@@ -1,5 +1,6 @@
 "use server";
 
+import { clerkClient, currentUser } from "@clerk/nextjs";
 import User from "../models/user.model";
 import { connectToDB } from "../mongooese";
 
@@ -14,8 +15,9 @@ export async function updateUser(
 
   try {
     const user = await User.findOneAndUpdate(
-      { id: userId },
+      { _id: userId },
       {
+        _id: userId,
         id: userId,
         email: email,
         full_name: fullName,
@@ -27,6 +29,11 @@ export async function updateUser(
         new: true,
       }
     );
+
+    const params = { externalId: user?._id?.toString() };
+    await clerkClient.users.updateUser(userId, params);
+    //console.log(usersad);
+    //console.log(asdsad);
 
     return {
       status: "success",

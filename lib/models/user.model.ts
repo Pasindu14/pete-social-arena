@@ -1,7 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    _id: { type: mongoose.Types.ObjectId, },
+    _id: { type: mongoose.Types.ObjectId, require: true },
     id: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     full_name: { type: String, required: true },

@@ -1,15 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
+import {
+  ClerkLoaded,
+  ClerkLoading,
+  UserButton,
+  clerkClient,
+} from "@clerk/nextjs";
 import AddPost from "./AddPost";
 import Loader from "@/components/common/Loader";
 import { loaderColor } from "@/constants/colors";
-import secureLocalStorage from "react-secure-storage";
 import { updateUser } from "@/lib/server-actions/user-actions";
 import toast from "react-hot-toast";
-import { getUserId, setCookie, setUserId } from "@/lib/utils";
-import { set } from "mongoose";
+import { getUserInitialLogin, setCookie } from "@/lib/utils";
+import secureLocalStorage from "react-secure-storage";
 
 interface HeaderProps {
   userId: string;
@@ -26,12 +30,13 @@ const Header = ({
   profilePictureUrl,
   bio,
 }: HeaderProps) => {
-  const user = getUserId();
   /// handle signin to DB
   useEffect(() => {
     const handleUserUpdate = async () => {
-      let user = getUserId();
-      if (user !== null) {
+      //secureLocalStorage.clear();
+      let userInitialLogin = getUserInitialLogin();
+
+      if (userInitialLogin !== null) {
         return;
       }
 
@@ -46,8 +51,8 @@ const Header = ({
         if (data?.status === "error") {
           toast.error("Oops! Something went wrong. Please try again !");
         } else {
-          setCookie("isUserSetInDB", true);
-          setUserId(data?.data!);
+          ///setCookie("isUserSetInDB", true);
+          //console.log(data.data);
         }
       } catch (error) {
         toast.error("Oops! Something went wrong. Please try again !");

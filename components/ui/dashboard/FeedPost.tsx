@@ -1,12 +1,29 @@
-import Loader from "@/components/common/Loader";
-import { primaryColor } from "@/constants/colors";
+import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import React from "react";
 import { MessageCircle, Share2, ThumbsUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { primaryColor } from "@/constants/colors";
+import { getFormattedDateTime, getInitials, getUserId } from "@/lib/utils";
+import LikeButton from "@/components/common/LikeButton";
 
-const Feed = () => {
+interface FeedPostProps {
+  postId: string;
+  profileImage: string;
+  fullName: string;
+  postDate: Date;
+  postImage: string;
+  status: string;
+}
+
+export function FeedPost({
+  postId,
+  profileImage,
+  fullName,
+  postDate,
+  postImage,
+  status,
+}: FeedPostProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <section
@@ -16,41 +33,36 @@ const Feed = () => {
           <div className="grid md:grid-cols-1 md:w-[50vw]">
             <div className="flex gap-4 items-center">
               <Avatar>
-                <AvatarImage src="/Image1.jpg" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={profileImage} />
+                <AvatarFallback>{getInitials(fullName)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col justify-center ">
-                <p>Pasindu Dulanjaya</p>
-                <h4 className="text-xs"> 2023/11/25</h4>
+                <p>{fullName}</p>
+                <h4 className="text-xs"> {getFormattedDateTime(postDate)}</h4>
               </div>
             </div>
 
             <div>
               <Separator className="my-4 bg-white " />
             </div>
-            <div className="relative md:h-[40vh]  h-[25vh]">
-              <Image
-                fill
-                src="/Image1.jpg"
-                alt=""
-                objectFit="cover"
-                className="rounded-xl"
-              />
-            </div>
-            <p className="mt-4">
-              Enjoying a beautiful day outdoors with friends. 😊🌞 #FunTimes
-              Enjoying a beautiful day outdoors with friends. 😊🌞
-              #FunTimesEnjoying a beautiful day outdoors with friends. 😊🌞
-              #FunTimes
-            </p>
+
+            {postImage && (
+              <div className="relative md:h-[40vh]  h-[25vh]">
+                <Image
+                  fill
+                  src={postImage}
+                  alt=""
+                  objectFit="cover"
+                  className="rounded-xl"
+                />
+              </div>
+            )}
+            <p className="mt-4">{status}</p>
             <div>
-              <Separator className="my-4 bg-white " />
+              <Separator className="my-4 bg-white" />
             </div>
             <div className="flex items-center justify-between gap-8 md:px-32">
-              <div className="flex gap-2 items-center justify-center">
-                <ThumbsUp className={`hover:text-[${primaryColor}]`} />
-                <h1>Like</h1>
-              </div>
+              <LikeButton postId={String(postId)} />
               <div className="flex gap-2 items-center justify-center">
                 <MessageCircle className={`hover:text-[${primaryColor}]`} />
                 <h1>Comment</h1>
@@ -65,6 +77,4 @@ const Feed = () => {
       </section>
     </div>
   );
-};
-
-export default Feed;
+}
