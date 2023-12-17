@@ -22,6 +22,9 @@ export const getUserInitialLogin = (): string | null => {
   return secureLocalStorage.getItem("isUserSetInDB")?.toString() ?? null;
 };
 
+export const setUserInitialLogin = () => {
+  return secureLocalStorage.setItem("isUserSetInDB", true);
+};
 
 export const getInitials = (fullName: string) => {
   // Check if the full name is not empty

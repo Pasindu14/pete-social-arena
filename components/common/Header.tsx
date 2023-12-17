@@ -1,19 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import {
-  ClerkLoaded,
-  ClerkLoading,
-  UserButton,
-  clerkClient,
-} from "@clerk/nextjs";
-import AddPost from "./AddPost";
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
+import AddPost from "../ui/dashboard/AddPost";
 import Loader from "@/components/common/Loader";
 import { loaderColor } from "@/constants/colors";
 import { updateUser } from "@/lib/server-actions/user-actions";
 import toast from "react-hot-toast";
-import { getUserInitialLogin, setCookie } from "@/lib/utils";
-import secureLocalStorage from "react-secure-storage";
+import { getUserInitialLogin, setUserInitialLogin } from "@/lib/utils";
 
 interface HeaderProps {
   userId: string;
@@ -30,10 +24,8 @@ const Header = ({
   profilePictureUrl,
   bio,
 }: HeaderProps) => {
-  /// handle signin to DB
   useEffect(() => {
     const handleUserUpdate = async () => {
-      //secureLocalStorage.clear();
       let userInitialLogin = getUserInitialLogin();
 
       if (userInitialLogin !== null) {
@@ -48,11 +40,11 @@ const Header = ({
           profilePictureUrl,
           bio
         );
-        if (data?.status === "error") {
+
+        if (data?.success === false) {
           toast.error("Oops! Something went wrong. Please try again !");
         } else {
-          ///setCookie("isUserSetInDB", true);
-          //console.log(data.data);
+          setUserInitialLogin();
         }
       } catch (error) {
         toast.error("Oops! Something went wrong. Please try again !");

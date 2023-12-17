@@ -1,27 +1,26 @@
 import React from "react";
-import { clerkClient, currentUser } from "@clerk/nextjs";
 import { fetchPosts } from "@/lib/server-actions/post-actions";
 import { FeedPost } from "@/components/ui/dashboard/FeedPost";
 import { getUserId } from "@/lib/utils";
+import { currentUser } from "@clerk/nextjs";
 
 const Page = async () => {
-  const userId = getUserId();
-  const posts = await fetchPosts(userId!);
-  const asd = await currentUser();
-
-  console.log(asd);
+  const user = await currentUser();
+  const posts = await fetchPosts(user?.id!);
 
   return (
     <div>
-      {posts.map((post) => {
+      {posts?.map((post: any) => {
         return (
           <FeedPost
-            postId={post._id}
-            fullName={post.author.full_name}
-            profileImage={post.author.profile_picture_url}
-            postDate={post.post_date}
-            postImage={post.image_url}
-            status={post.status}
+            postId={post.post_id}
+            postDate={post.post_created_at}
+            postImage={post.post_image_url}
+            status={post.post_status}
+            profile_picture_url={post.author_profile_picture_url}
+            full_name={post.author_full_name}
+            is_liked_by_current_user={post.is_liked_by_user}
+            key={post.post_id}
           />
         );
       })}

@@ -9,20 +9,22 @@ import LikeButton from "@/components/common/LikeButton";
 
 interface FeedPostProps {
   postId: string;
-  profileImage: string;
-  fullName: string;
   postDate: Date;
   postImage: string;
   status: string;
+  profile_picture_url: string;
+  full_name: string;
+  is_liked_by_current_user: boolean;
 }
 
 export function FeedPost({
   postId,
-  profileImage,
-  fullName,
   postDate,
   postImage,
   status,
+  profile_picture_url,
+  full_name,
+  is_liked_by_current_user,
 }: FeedPostProps) {
   return (
     <div className="flex flex-col items-center justify-center">
@@ -33,11 +35,11 @@ export function FeedPost({
           <div className="grid md:grid-cols-1 md:w-[50vw]">
             <div className="flex gap-4 items-center">
               <Avatar>
-                <AvatarImage src={profileImage} />
-                <AvatarFallback>{getInitials(fullName)}</AvatarFallback>
+                <AvatarImage src={profile_picture_url} />
+                <AvatarFallback>{getInitials(full_name)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col justify-center ">
-                <p>{fullName}</p>
+                <p>{full_name}</p>
                 <h4 className="text-xs"> {getFormattedDateTime(postDate)}</h4>
               </div>
             </div>
@@ -47,13 +49,14 @@ export function FeedPost({
             </div>
 
             {postImage && (
-              <div className="relative md:h-[40vh]  h-[25vh]">
+              <div className="relative md:h-[40vh] h-[25vh]">
                 <Image
                   fill
                   src={postImage}
                   alt=""
                   objectFit="cover"
                   className="rounded-xl"
+                  priority
                 />
               </div>
             )}
@@ -62,7 +65,10 @@ export function FeedPost({
               <Separator className="my-4 bg-white" />
             </div>
             <div className="flex items-center justify-between gap-8 md:px-32">
-              <LikeButton postId={String(postId)} />
+              <LikeButton
+                postId={String(postId)}
+                is_liked_by_user={is_liked_by_current_user}
+              />
               <div className="flex gap-2 items-center justify-center">
                 <MessageCircle className={`hover:text-[${primaryColor}]`} />
                 <h1>Comment</h1>

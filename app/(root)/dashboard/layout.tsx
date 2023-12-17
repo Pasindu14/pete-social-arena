@@ -1,4 +1,4 @@
-import Header from "@/components/ui/dashboard/Header";
+import Header from "@/components/common/Header";
 import { currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";
 import LoaderFull from "./loader";

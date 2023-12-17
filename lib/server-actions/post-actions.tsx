@@ -1,8 +1,7 @@
 "use server";
 
-import Post from "../models/post.model";
-import User from "../models/user.model";
-import { connectToDB } from "../mongooese";
+import { supabase } from "@/utils/server";
+import ResponseHandler from "../models/response.model";
 
 interface PostParams {
   authorId: string;
@@ -17,69 +16,83 @@ export async function createPost({
   imageUrl,
   status,
 }: PostParams) {
+  const responseHandler = new ResponseHandler<any>();
   try {
-    connectToDB();
-    const createdPost = await Post.create({
-      author: authorId,
-      content_type: contentType,
-      image_url: imageUrl,
-      status: status,
-    });
-    await User.findByIdAndUpdate(authorId, {
-      $push: { posts: createdPost._id },
-    });
-  } catch (error) {
-    throw new Error(`Failed to create post: ${error}`);
+    const { error } = await supabase
+      .from("post")
+      .insert([
+        {
+          author: authorId,
+          content_type: contentType,
+          image_url: imageUrl,
+          status: status,
+        },
+      ])
+      .select();
+
+    if (error != null) {
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error.message
+      );
+    }
+  } catch (error: any) {
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error.message
+    );
   }
 }
 
 export async function fetchPosts(userId: string) {
   try {
-    connectToDB();
-
-    const posts = await Post.aggregate([
-      { $limit: 10 },
-      {
-        $addFields: {
-          isLikedByCurrentUser: { $in: [userId, "$likes_by"] },
-        },
-      },
-      {
-        $lookup: {
-          from: "users", // the collection to join
-          localField: "author", // field from the input documents
-          foreignField: "_id", // field from the documents of the "from" collection
-          as: "authorDetails", // output array field
-        },
-      },
-      { $unwind: "$authorDetails" }, // Deconstructs the 'authorDetails' array
-    ]).exec();
-
-    return posts.map((post) => ({
-      ...post,
-      author: post.authorDetails,
-      // Remove the authorDetails field if not needed
-    }));
+    let { data: posts } = await supabase.rpc("get_posts_with_author_details", {
+      check_user_id: userId,
+    });
+    console.log(posts);
+    return posts;
   } catch (error) {
-    throw new Error(`Failed to create post: ${error}`);
+    return [];
   }
 }
 
-export async function addLikes(userId: string, postId: string) {
+export async function addLikes(
+  userId: string,
+  postId: string,
+  is_increment: boolean
+) {
+  const responseHandler = new ResponseHandler<any>();
   try {
-    connectToDB();
+    let { error } = await supabase.rpc("update_post_and_modify_user", {
+      post_id: postId,
+      table_name: "post",
+      increment_field_name: "likes_count",
+      array_column_name: "likes_by",
+      user_id: userId,
+      is_increment: is_increment,
+    });
+    if (error) {
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error.message
+      );
+    }
+    /* 
+    const { error: errorInsert } = await supabase
+      .from("likes")
+      .insert([{ post_id: postId, user_id: userId }])
+      .select();
 
-    const postsUpdate = await Post.findByIdAndUpdate(
-      { _id: postId },
-      {
-        $inc: {
-          likes_count: 1,
-        },
-        $push: { likes_by: userId },
-      }
+    if (errorInsert) {
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error
+      );
+    } */
+  } catch (error: any) {
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error
     );
-    console.log(postsUpdate);
-  } catch (error) {
-    throw new Error(`Failed to create post: ${error}`);
   }
 }

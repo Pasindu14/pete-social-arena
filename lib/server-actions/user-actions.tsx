@@ -1,8 +1,7 @@
 "use server";
 
-import { clerkClient, currentUser } from "@clerk/nextjs";
-import User from "../models/user.model";
-import { connectToDB } from "../mongooese";
+import { supabase } from "@/utils/server";
+import ResponseHandler from "../models/response.model";
 
 export async function updateUser(
   userId: string,
@@ -11,48 +10,35 @@ export async function updateUser(
   profilePictureUrl: string,
   bio: string
 ) {
-  connectToDB();
-
+  const responseHandler = new ResponseHandler<any>();
   try {
-    const user = await User.findOneAndUpdate(
-      { _id: userId },
-      {
-        _id: userId,
-        id: userId,
-        email: email,
-        full_name: fullName,
-        profile_picture_url: profilePictureUrl,
-        bio: bio,
-      },
-      {
-        upsert: true,
-        new: true,
-      }
+    const { data, error } = await supabase
+      .from("user")
+      .upsert([
+        {
+          id: userId,
+          email: email,
+          full_name: fullName,
+          profile_picture_url: profilePictureUrl,
+          bio: bio,
+        },
+      ])
+      .select();
+    if (error != null) {
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error.message
+      );
+    }
+
+    return responseHandler.setSuccess(
+      `User updated successfully`,
+      data?.toString()
     );
-
-    const params = { externalId: user?._id?.toString() };
-    await clerkClient.users.updateUser(userId, params);
-    //console.log(usersad);
-    //console.log(asdsad);
-
-    return {
-      status: "success",
-      message: "User updated successfully",
-      data: user?._id?.toString(),
-    };
   } catch (error: any) {
-    return {
-      status: "error",
-      message: `Failed to update user: ${error.message}`,
-    };
-  }
-}
-
-export async function fetchUser(userId: string) {
-  try {
-    connectToDB();
-    return await User.findOne({ id: userId });
-  } catch (error) {
-    throw new Error(`Failed to fetch user: ${error}`);
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error.message
+    );
   }
 }

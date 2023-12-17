@@ -24,9 +24,10 @@ import { PostValidation } from "@/lib/validation/post";
 import { useUploadThing } from "@/utils/uploadthing";
 import toast from "react-hot-toast";
 import Loader from "@/components/common/Loader";
+import { useUser } from "@clerk/nextjs";
 
 const AddPost = () => {
-  const userId = getUserId();
+  const { user } = useUser();
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<File[]>();
   const [submitting, setSubmitting] = useState(false);
@@ -52,7 +53,7 @@ const AddPost = () => {
       }
 
       const data = {
-        authorId: userId!,
+        authorId: user?.id!,
         contentType: uploadImageUrl != "" ? "image" : "text",
         imageUrl: uploadImageUrl,
         status: values.status,
