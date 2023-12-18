@@ -55,10 +55,11 @@ export const getInitials = (fullName: string) => {
 export const getFormattedDateTime = (datePara: Date) => {
   const date = new Date(datePara);
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Add 1 because months are zero-based
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = date.getHours() % 12 || 12;
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = date.getHours() >= 12 ? "PM" : "AM";
 
-  return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
+  return `${year}-${month}-${day} ${hours}:${minutes} ${ampm}`;
+};

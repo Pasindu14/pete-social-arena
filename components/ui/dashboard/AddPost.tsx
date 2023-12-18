@@ -23,7 +23,7 @@ import { z } from "zod";
 import { PostValidation } from "@/lib/validation/post";
 import { useUploadThing } from "@/utils/uploadthing";
 import toast from "react-hot-toast";
-import Loader from "@/components/common/Loader";
+import { Loader } from "@/components/common/Loader";
 import { useUser } from "@clerk/nextjs";
 
 const AddPost = () => {

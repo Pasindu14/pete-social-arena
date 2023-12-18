@@ -26,6 +26,7 @@ export async function createPost({
           content_type: contentType,
           image_url: imageUrl,
           status: status,
+          likes_by: [],
         },
       ])
       .select();
@@ -49,7 +50,6 @@ export async function fetchPosts(userId: string) {
     let { data: posts } = await supabase.rpc("get_posts_with_author_details", {
       check_user_id: userId,
     });
-    console.log(posts);
     return posts;
   } catch (error) {
     return [];

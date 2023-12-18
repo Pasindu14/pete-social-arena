@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { ThumbsUp } from "lucide-react";
 import { primaryColor, secondaryColor } from "@/constants/colors";
-import { getUserId } from "@/lib/utils";
 import { addLikes } from "@/lib/server-actions/post-actions";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
@@ -11,9 +10,10 @@ import { useUser } from "@clerk/nextjs";
 interface LikeProps {
   postId: string;
   is_liked_by_user: boolean;
+  iconSize: number;
 }
 
-const LikeButton = ({ postId, is_liked_by_user }: LikeProps) => {
+const LikeButton = ({ postId, is_liked_by_user, iconSize }: LikeProps) => {
   const { user } = useUser();
   const [isLiked, setIsLiked] = useState(is_liked_by_user);
   const likePressed = async () => {
@@ -32,11 +32,12 @@ const LikeButton = ({ postId, is_liked_by_user }: LikeProps) => {
 
   return (
     <div>
-      <Button onClick={likePressed} variant="ghost">
+      <Button onClick={likePressed} variant="outline">
         <div className="flex gap-2 items-center justify-center">
           <ThumbsUp
             color={`${isLiked === true ? primaryColor : secondaryColor}`}
             className={`hover:text-[${primaryColor}]`}
+            size={iconSize}
           />
           <h1 className={`${isLiked === true ? `text-[${primaryColor}]` : ""}`}>
             Like

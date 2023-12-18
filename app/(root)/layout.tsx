@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Heebo } from "next/font/google";
 import "../globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Footer from "@/components/common/Footer";
 import { Toaster } from "react-hot-toast";
+import Header from "@/components/common/Header";
 
 const heebo = Heebo({ subsets: ["latin"] });
 
@@ -13,11 +14,12 @@ export const metadata: Metadata = {
   description: "Pete's Social Arena",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await currentUser();
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
@@ -29,8 +31,17 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
-            {/*  <Footer /> */}
+            <div className="mt-4">
+              <Header
+                userId={user?.id!}
+                email={user?.emailAddresses[0]?.emailAddress!}
+                fullName={user?.firstName! + " " + user?.lastName!}
+                profilePictureUrl={user?.imageUrl!}
+                bio=""
+              />
+              {children}
+              {/*  <Footer /> */}
+            </div>
           </ThemeProvider>
           <Toaster />
         </body>

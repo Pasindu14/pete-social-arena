@@ -1,11 +1,15 @@
+"use server";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { MessageCircle, Share2, ThumbsUp } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { primaryColor } from "@/constants/colors";
-import { getFormattedDateTime, getInitials, getUserId } from "@/lib/utils";
 import LikeButton from "@/components/common/LikeButton";
+import CommentSection from "@/components/common/CommentSection";
+import ShareButton from "@/components/common/ShareButton";
+import SubmissionCard from "@/components/common/SubmissionCard";
+import { Button } from "../button";
+import CommentButton from "@/components/common/CommentButton";
+import Test from "@/components/common/Test";
 
 interface FeedPostProps {
   postId: string;
@@ -17,7 +21,7 @@ interface FeedPostProps {
   is_liked_by_current_user: boolean;
 }
 
-export function FeedPost({
+export async function FeedPost({
   postId,
   postDate,
   postImage,
@@ -33,16 +37,11 @@ export function FeedPost({
       >
         <div className="flex items-center justify-center">
           <div className="grid md:grid-cols-1 md:w-[50vw]">
-            <div className="flex gap-4 items-center">
-              <Avatar>
-                <AvatarImage src={profile_picture_url} />
-                <AvatarFallback>{getInitials(full_name)}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col justify-center ">
-                <p>{full_name}</p>
-                <h4 className="text-xs"> {getFormattedDateTime(postDate)}</h4>
-              </div>
-            </div>
+            <SubmissionCard
+              profile_picture_url={profile_picture_url}
+              full_name={full_name}
+              postDate={postDate}
+            />
 
             <div>
               <Separator className="my-4 bg-white " />
@@ -68,15 +67,30 @@ export function FeedPost({
               <LikeButton
                 postId={String(postId)}
                 is_liked_by_user={is_liked_by_current_user}
+                iconSize={25}
               />
-              <div className="flex gap-2 items-center justify-center">
-                <MessageCircle className={`hover:text-[${primaryColor}]`} />
-                <h1>Comment</h1>
-              </div>
-              <div className="flex gap-2 items-center justify-center">
-                <Share2 className={`hover:text-[${primaryColor}]`} />
-                <h1>Share</h1>
-              </div>
+
+              <CommentButton
+                postId={String(postId)}
+                postDate={postDate}
+                postImage={postImage}
+                status={status}
+                profile_picture_url={profile_picture_url}
+                full_name={full_name}
+                is_liked_by_current_user={is_liked_by_current_user}
+              />
+
+              {/* <CommentSection
+                postId={String(postId)}
+                postDate={postDate}
+                postImage={postImage}
+                status={status}
+                profile_picture_url={profile_picture_url}
+                full_name={full_name}
+                is_liked_by_current_user={is_liked_by_current_user}
+              /> */}
+
+              <ShareButton postId={String(postId)} />
             </div>
           </div>
         </div>

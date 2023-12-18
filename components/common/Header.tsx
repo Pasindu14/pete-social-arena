@@ -3,11 +3,11 @@ import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import AddPost from "../ui/dashboard/AddPost";
-import Loader from "@/components/common/Loader";
 import { loaderColor } from "@/constants/colors";
 import { updateUser } from "@/lib/server-actions/user-actions";
 import toast from "react-hot-toast";
 import { getUserInitialLogin, setUserInitialLogin } from "@/lib/utils";
+import { Loader } from "./Loader";
 
 interface HeaderProps {
   userId: string;
@@ -80,7 +80,7 @@ const Header = ({
       </div>
 
       <ClerkLoading>
-        <Loader size={25} color={loaderColor} />
+        <Loader size={15} color={loaderColor} />
       </ClerkLoading>
       <ClerkLoaded>
         <UserButton />
