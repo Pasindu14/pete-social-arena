@@ -7,8 +7,16 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { SendHorizontal } from "lucide-react";
 import toast from "react-hot-toast";
+import ResponseHandler from "@/lib/models/response.model";
+import { Comment } from "@/lib/models/comment.model";
 
-const CommentForm = ({ postId }: { postId: string }) => {
+const CommentForm = ({
+  postId,
+  onCommentSubmit,
+}: {
+  postId: string;
+  onCommentSubmit: (comment: any) => void;
+}) => {
   const { user } = useUser();
   const [comment, setComment] = useState("");
   const [isDisabled, setisDisabled] = useState(true);
@@ -23,15 +31,17 @@ const CommentForm = ({ postId }: { postId: string }) => {
   };
 
   const submitComment = async () => {
-    const response = await createComment({
+    const response = (await createComment({
       userId: user?.id!,
       comment: comment,
       parentCommentId: null,
       postId: postId,
-    });
+    })) as ResponseHandler<Comment>;
 
     if (response?.success === false) {
       toast.error(response.message);
+    } else {
+      onCommentSubmit(response.data);
     }
   };
 

@@ -18,16 +18,14 @@ export async function createComment({
 }: CommentParams) {
   const responseHandler = new ResponseHandler<any>();
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("comments")
-      .insert([
-        {
-          user_id: userId,
-          post_id: postId,
-          comment: comment,
-          parent_comment_id: parentCommentId,
-        },
-      ])
+      .insert({
+        user_id: userId,
+        post_id: postId,
+        comment: comment,
+        parent_comment_id: parentCommentId,
+      })
       .select();
 
     if (error != null) {
@@ -36,7 +34,10 @@ export async function createComment({
         error.message
       );
     }
-    1;
+    return responseHandler.setSuccess(
+      "Your comment has been posted successfully.",
+      { comment: data[0] }
+    );
   } catch (error: any) {
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
@@ -47,12 +48,10 @@ export async function createComment({
 
 export async function fetchCommentsByPost(postId: string) {
   try {
-    let { data: comments } = await supabase.rpc("get_comments_details", {
+    let { data: comments, error } = await supabase.rpc("get_comments_details", {
       param_post_id: postId,
     });
 
-    console.log("first 10 comments fetched");
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     return comments;
   } catch (error) {
     return [];

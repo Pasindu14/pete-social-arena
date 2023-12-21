@@ -43,7 +43,6 @@ const CommentButton = ({
           profile_picture_url={profile_picture_url}
           full_name={full_name}
           is_liked_by_current_user={is_liked_by_current_user}
-          dialogOpen={isDialogOpen}
         />
       )}
     </div>

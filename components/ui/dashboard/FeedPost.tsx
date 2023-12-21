@@ -70,7 +70,7 @@ export async function FeedPost({
                 iconSize={25}
               />
 
-              <CommentButton
+              <CommentSection
                 postId={String(postId)}
                 postDate={postDate}
                 postImage={postImage}
@@ -79,16 +79,6 @@ export async function FeedPost({
                 full_name={full_name}
                 is_liked_by_current_user={is_liked_by_current_user}
               />
-
-              {/* <CommentSection
-                postId={String(postId)}
-                postDate={postDate}
-                postImage={postImage}
-                status={status}
-                profile_picture_url={profile_picture_url}
-                full_name={full_name}
-                is_liked_by_current_user={is_liked_by_current_user}
-              /> */}
 
               <ShareButton postId={String(postId)} />
             </div>
