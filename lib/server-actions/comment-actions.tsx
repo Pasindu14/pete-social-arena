@@ -48,10 +48,21 @@ export async function createComment({
 
 export async function fetchCommentsByPost(postId: string) {
   try {
-    let { data: comments, error } = await supabase.rpc("get_comments_details", {
-      param_post_id: postId,
-    });
+    let {
+      data: comments,
+      error,
+      count,
+    } = await supabase.rpc(
+      "get_comments_details",
+      {
+        param_post_id: postId,
+      },
+      {
+        count: "exact",
+      }
+    );
 
+    console.log(count);
     return comments;
   } catch (error) {
     return [];

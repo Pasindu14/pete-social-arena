@@ -55,9 +55,13 @@ const CommentSection = ({
 
   const handleOpen = async () => {
     setLoading(true);
-    const comments = await fetchCommentsByPost(postId);
-    console.log(comments);
-    setComments(comments);
+    try {
+      const fetchedComments = await fetchCommentsByPost(postId);
+      console.log("Fetched Comments: ", fetchedComments);
+      setComments(fetchedComments);
+    } catch (error) {
+      console.error("Error fetching comments: ", error);
+    }
     setLoading(false);
   };
 

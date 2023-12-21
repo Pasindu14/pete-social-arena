@@ -8,9 +8,6 @@ import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 const Page = async () => {
   const user = await currentUser();
   const posts = await fetchPosts(user?.id!);
-  const comments = await fetchCommentsByPost(
-    "a62b03d8-353a-4991-901e-a0d73f029034"
-  );
 
   return (
     <div>

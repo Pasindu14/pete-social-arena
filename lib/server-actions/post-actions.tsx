@@ -47,9 +47,15 @@ export async function createPost({
 
 export async function fetchPosts(userId: string) {
   try {
-    let { data: posts } = await supabase.rpc("get_posts_with_author_details", {
-      check_user_id: userId,
-    });
+    let { data: posts } = await supabase.rpc(
+      "get_posts_with_author_details",
+      {
+        check_user_id: userId,
+      },
+      {
+        count: "exact",
+      }
+    );
     return posts;
   } catch (error) {
     return [];
