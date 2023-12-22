@@ -1,12 +1,17 @@
 import React from "react";
 import SubmissionCard from "./SubmissionCard";
+import { primaryColor } from "@/constants/colors";
 
 type CommentProps = {
   comments: any;
 };
 const CommentsCard = ({ comments }: CommentProps) => {
   return (
-    <div className="p-2">
+    <div
+      className={`p-2 ${
+        comments.length > 0 ? "md:h-[60vh]" : "h-[25vh]"
+      }    overflow-y-scroll custom-scrollbar`}
+    >
       {comments.map((comment: any) => (
         <div
           key={comment.comment_id}

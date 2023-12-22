@@ -10,6 +10,7 @@ import SubmissionCard from "@/components/common/SubmissionCard";
 import { Button } from "../button";
 import CommentButton from "@/components/common/CommentButton";
 import Test from "@/components/common/Test";
+import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 
 interface FeedPostProps {
   postId: string;
@@ -30,6 +31,8 @@ export async function FeedPost({
   full_name,
   is_liked_by_current_user,
 }: FeedPostProps) {
+  /*   const datat = await fetchCommentsByPost(postId);
+  console.log(datat); */
   return (
     <div className="flex flex-col items-center justify-center">
       <section

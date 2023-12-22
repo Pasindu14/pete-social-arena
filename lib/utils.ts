@@ -63,3 +63,14 @@ export const getFormattedDateTime = (datePara: Date) => {
 
   return `${year}-${month}-${day} ${hours}:${minutes} ${ampm}`;
 };
+
+
+
+export const createFetch =
+  (options: Pick<RequestInit, "next" | "cache">) =>
+    (url: RequestInfo | URL, init?: RequestInit) => {
+      return fetch(url, {
+        ...init,
+        ...options,
+      });
+    };

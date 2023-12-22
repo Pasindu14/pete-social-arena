@@ -59,3 +59,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.custom-scrollbar {
+  @apply scrollbar scrollbar-thumb-green-700/[0.30] scrollbar-track-gray-100/[0.10];
+}

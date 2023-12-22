@@ -1,7 +1,8 @@
 "use server";
 
-import { supabase } from "@/utils/server";
+import { supabase, supabaseCacheFreeClient } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
+import { createClient } from "@supabase/supabase-js";
 
 interface CommentParams {
   userId: string;
@@ -28,6 +29,7 @@ export async function createComment({
       })
       .select();
 
+    console.log(data);
     if (error != null) {
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
@@ -48,21 +50,12 @@ export async function createComment({
 
 export async function fetchCommentsByPost(postId: string) {
   try {
-    let {
-      data: comments,
-      error,
-      count,
-    } = await supabase.rpc(
+    let { data: comments } = await supabaseCacheFreeClient.rpc(
       "get_comments_details",
       {
         param_post_id: postId,
-      },
-      {
-        count: "exact",
       }
     );
-
-    console.log(count);
     return comments;
   } catch (error) {
     return [];
