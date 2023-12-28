@@ -20,6 +20,8 @@ interface FeedPostProps {
   profile_picture_url: string;
   full_name: string;
   is_liked_by_current_user: boolean;
+  post_likes_count: number;
+  post_comments_count: number;
 }
 
 export async function FeedPost({
@@ -30,6 +32,8 @@ export async function FeedPost({
   profile_picture_url,
   full_name,
   is_liked_by_current_user,
+  post_likes_count,
+  post_comments_count,
 }: FeedPostProps) {
   /*   const datat = await fetchCommentsByPost(postId);
   console.log(datat); */
@@ -63,6 +67,19 @@ export async function FeedPost({
               </div>
             )}
             <p className="mt-4">{status}</p>
+            <div className="flex justify-between gap-4 mt-2">
+              {post_likes_count > 0 ? (
+                <h4 className="text-xs">{`${post_likes_count} likes`}</h4>
+              ) : (
+                <h4></h4>
+              )}
+
+              {post_comments_count > 0 ? (
+                <h4 className="text-xs">{`${post_comments_count} likes`}</h4>
+              ) : (
+                <h4></h4>
+              )}
+            </div>
             <div>
               <Separator className="my-4 bg-white" />
             </div>

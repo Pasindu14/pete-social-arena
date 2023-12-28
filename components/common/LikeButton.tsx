@@ -32,7 +32,7 @@ const LikeButton = ({ postId, is_liked_by_user, iconSize }: LikeProps) => {
 
   return (
     <div>
-      <Button onClick={likePressed} variant="outline">
+      <Button onClick={likePressed} variant="outline" className="border-none">
         <div className="flex gap-2 items-center justify-center">
           <ThumbsUp
             color={`${isLiked === true ? primaryColor : secondaryColor}`}

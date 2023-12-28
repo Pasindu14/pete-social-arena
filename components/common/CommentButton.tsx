@@ -29,7 +29,11 @@ const CommentButton = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
     <div className="flex gap-2 items-center justify-center">
-      <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
+      <Button
+        variant="outline"
+        onClick={() => setIsDialogOpen(true)}
+        className="border-none"
+      >
         <MessageCircle className={`hover:text-[${primaryColor}]`} />
         <h1>Comment</h1>
       </Button>

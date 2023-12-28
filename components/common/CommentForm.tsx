@@ -2,7 +2,7 @@
 
 import { createComment } from "@/lib/server-actions/comment-actions";
 import { useUser } from "@clerk/nextjs";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { SendHorizontal } from "lucide-react";
@@ -13,13 +13,22 @@ import { Comment } from "@/lib/models/comment.model";
 const CommentForm = ({
   postId,
   onCommentSubmit,
+  autoFocus,
 }: {
   postId: string;
   onCommentSubmit: (comment: any) => void;
+  autoFocus: boolean;
 }) => {
   const { user } = useUser();
   const [comment, setComment] = useState("");
   const [isDisabled, setisDisabled] = useState(true);
+  const myRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (myRef.current) {
+      myRef.current.focus();
+    }
+  }, [autoFocus]);
 
   const setCommentText = (text: string) => {
     setComment(text);
@@ -53,6 +62,7 @@ const CommentForm = ({
           placeholder="Write a comment"
           className="p-2"
           onChange={(e) => setCommentText(e.target.value)}
+          ref={myRef}
         />
         <Button onClick={submitComment} disabled={isDisabled}>
           <SendHorizontal size={15} />

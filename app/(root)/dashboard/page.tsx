@@ -12,6 +12,7 @@ const Page = async () => {
   return (
     <div>
       {posts?.map((post: any) => {
+        console.log(post);
         return (
           <FeedPost
             postId={post.post_id}
@@ -21,6 +22,8 @@ const Page = async () => {
             profile_picture_url={post.author_profile_picture_url}
             full_name={post.author_full_name}
             is_liked_by_current_user={post.is_liked_by_user}
+            post_comments_count={post.post_comments_count}
+            post_likes_count={post.post_likes_count}
             key={post.post_id}
           />
         );

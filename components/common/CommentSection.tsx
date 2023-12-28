@@ -2,7 +2,7 @@
 
 import { primaryColor } from "@/constants/colors";
 import { MessageCircle } from "lucide-react";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { cache } from "react";
 import { Button } from "../ui/button";
 import {
@@ -17,7 +17,7 @@ import { getFormattedDateTime, getInitials } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
-import CommentForm from "./CommentInput";
+import CommentForm from "./CommentForm";
 import SubmissionCard from "./SubmissionCard";
 import CommentsCard from "./CommentsCard";
 import CommentButton from "./CommentButton";
@@ -27,6 +27,7 @@ import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 import { revalidatePath } from "next/cache";
 import { Comment } from "@/lib/models/comment.model";
 import toast from "react-hot-toast";
+import CommentButtonInDialog from "./CommentButtonInDialog";
 
 interface CommentProps {
   postId: string;
@@ -51,6 +52,11 @@ const CommentSection = ({
 }: CommentProps) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState<Comment[] | null>([]);
+  const [focusCommentInput, setFocusCommentInput] = useState(false);
+
+  const handleCommentButtonClick = () => {
+    setFocusCommentInput(!focusCommentInput);
+  };
 
   const handleOpen = async () => {
     setLoading(true);
@@ -72,7 +78,11 @@ const CommentSection = ({
     <div className="flex gap-2 items-center justify-center">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" onClick={handleOpen}>
+          <Button
+            variant="outline"
+            onClick={handleOpen}
+            className="border-none"
+          >
             <MessageCircle className={`hover:text-[${primaryColor}]`} />
             <h1>Comment</h1>
           </Button>
@@ -118,6 +128,9 @@ const CommentSection = ({
                     is_liked_by_user={is_liked_by_current_user}
                     iconSize={15}
                   />
+                  <CommentButtonInDialog
+                    onButtonClick={handleCommentButtonClick}
+                  />
                   <ShareButton postId={String(postId)} />
                 </div>
 
@@ -127,6 +140,7 @@ const CommentSection = ({
                     fetchedAndSetComments();
                     //console.log(comment);
                   }}
+                  autoFocus={focusCommentInput}
                 />
 
                 <Separator className="mt-2" />
@@ -156,6 +170,10 @@ const CommentSection = ({
                         is_liked_by_user={is_liked_by_current_user}
                         iconSize={15}
                       />
+
+                      <CommentButtonInDialog
+                        onButtonClick={handleCommentButtonClick}
+                      />
                       <ShareButton postId={String(postId)} />
                     </div>
 
@@ -163,8 +181,8 @@ const CommentSection = ({
                       postId={postId}
                       onCommentSubmit={(comment: Comment) => {
                         fetchedAndSetComments();
-                        //console.log(comment);
                       }}
+                      autoFocus={focusCommentInput}
                     />
 
                     <Separator className="mt-2" />

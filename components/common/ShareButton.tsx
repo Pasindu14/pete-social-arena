@@ -1,70 +1,73 @@
+/**
+ * ShareButton component displays a button that opens a dialog for sharing a post.
+ *
+ * It takes a postId prop and generates a shareable URL for that post.
+ * Renders a Dialog with the post URL that can be copied to the clipboard.
+ * Uses React state and effects to update the URL on prop change.
+ * Handles click to copy URL and show success toast notification.
+ */
 "use client";
 
 import { primaryColor } from "@/constants/colors";
-import { MessageCircle, Share2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { Copy, Share2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import toast from "react-hot-toast";
 
 const ShareButton = ({ postId }: { postId: string }) => {
-  const router = useRouter();
+  const [currentUrl, setCurrentUrl] = useState<string | null>(null);
+  useEffect(() => {
+    setCurrentUrl(window.location.origin + "/post/" + `${postId}`);
+  }, [postId]);
 
-  const commentPressed = () => {
-    router.push(`/post/${postId}`);
+  const copyButtonPressed = () => {
+    navigator.clipboard.writeText(currentUrl!);
+    toast.success("Link copied to clipboard!");
   };
 
   return (
     <div className="flex gap-2 items-center justify-center">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">
+          <Button variant="outline" className="border-none">
             <Share2 className={`hover:text-[${primaryColor}]`} />
             <h1>Share</h1>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-5xl">
+        <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            <DialogTitle>Share</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                defaultValue="Pedro Duarte"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input
-                id="username"
-                defaultValue="@peduarte"
-                className="col-span-3"
-              />
-            </div>
+
+          <div className="grid grid-cols-8 items-center gap-4">
+            <Input
+              id="name"
+              defaultValue="Pedro Duarte"
+              className="col-span-7"
+              value={currentUrl ? currentUrl : ""}
+              disabled
+            />
+            <Button
+              onClick={copyButtonPressed}
+              variant="outline"
+              className="col-span-1"
+            >
+              <div className="flex gap-1 items-center justify-center">
+                <Copy className={`hover:text-[${primaryColor}]`} size={20} />
+              </div>
+            </Button>
           </div>
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
+
+          <DialogFooter></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
