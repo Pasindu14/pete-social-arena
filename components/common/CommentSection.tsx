@@ -33,6 +33,7 @@ interface CommentProps {
   postId: string;
   postDate: Date;
   postImage: string;
+  author: string;
   status: string;
   profile_picture_url: string;
   full_name: string;
@@ -45,6 +46,7 @@ const CommentSection = ({
   postId,
   postDate,
   postImage,
+  author,
   status,
   profile_picture_url,
   full_name,
@@ -136,6 +138,7 @@ const CommentSection = ({
 
                 <CommentForm
                   postId={postId}
+                  author={author}
                   onCommentSubmit={(comment: any) => {
                     fetchedAndSetComments();
                     //console.log(comment);
@@ -179,6 +182,7 @@ const CommentSection = ({
 
                     <CommentForm
                       postId={postId}
+                      author={author}
                       onCommentSubmit={(comment: Comment) => {
                         fetchedAndSetComments();
                       }}

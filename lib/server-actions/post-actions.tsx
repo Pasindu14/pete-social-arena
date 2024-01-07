@@ -83,18 +83,28 @@ export async function addLikes(
         error.message
       );
     }
-    /* 
-    const { error: errorInsert } = await supabase
-      .from("likes")
-      .insert([{ post_id: postId, user_id: userId }])
-      .select();
+  } catch (error: any) {
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error
+    );
+  }
+}
 
-    if (errorInsert) {
+export async function addComments(postId: string, increment_by: number) {
+  const responseHandler = new ResponseHandler<any>();
+  try {
+    let { data, error } = await supabase.rpc("update_post_comments", {
+      post_id: postId,
+      increment_by: increment_by,
+    });
+
+    if (error) {
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
-        error
+        error.message
       );
-    } */
+    }
   } catch (error: any) {
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,

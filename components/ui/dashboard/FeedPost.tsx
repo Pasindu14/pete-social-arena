@@ -16,6 +16,7 @@ interface FeedPostProps {
   postId: string;
   postDate: Date;
   postImage: string;
+  author: string;
   status: string;
   profile_picture_url: string;
   full_name: string;
@@ -28,6 +29,7 @@ export async function FeedPost({
   postId,
   postDate,
   postImage,
+  author,
   status,
   profile_picture_url,
   full_name,
@@ -75,7 +77,7 @@ export async function FeedPost({
               )}
 
               {post_comments_count > 0 ? (
-                <h4 className="text-xs">{`${post_comments_count} likes`}</h4>
+                <h4 className="text-xs">{`${post_comments_count} comments`}</h4>
               ) : (
                 <h4></h4>
               )}
@@ -94,6 +96,7 @@ export async function FeedPost({
                 postId={String(postId)}
                 postDate={postDate}
                 postImage={postImage}
+                author={author}
                 status={status}
                 profile_picture_url={profile_picture_url}
                 full_name={full_name}

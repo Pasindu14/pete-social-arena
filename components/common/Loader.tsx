@@ -1,6 +1,6 @@
 "use client";
 
-import SkewLoader from "react-spinners/SkewLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface LoaderProps {
   size: number;
@@ -11,7 +11,7 @@ export function LoaderFull({ size, color }: LoaderProps) {
   return (
     <div className="flex justify-center items-center w-full h-full min-h-[50vh]">
       <div className="sweet-loading">
-        <SkewLoader
+        <ClipLoader
           color={color}
           loading={true}
           size={size}
@@ -26,7 +26,7 @@ export function LoaderFull({ size, color }: LoaderProps) {
 export function Loader({ size, color }: LoaderProps) {
   return (
     <div className="sweet-loading">
-      <SkewLoader
+      <ClipLoader
         color={color}
         loading={true}
         size={size}

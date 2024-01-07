@@ -74,3 +74,13 @@ export const createFetch =
         ...options,
       });
     };
+
+export const getNotificationType = (type: string) => {
+  if (type === "like") {
+    return "liked your post";
+  } else if (type === "comment") {
+    return "commented on your post";
+  } else {
+    return "unknown notification type";
+  }
+};

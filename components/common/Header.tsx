@@ -8,6 +8,8 @@ import { updateUser } from "@/lib/server-actions/user-actions";
 import toast from "react-hot-toast";
 import { getUserInitialLogin, setUserInitialLogin } from "@/lib/utils";
 import { Loader } from "./Loader";
+import { BellRing } from "lucide-react";
+import Link from "next/link";
 
 interface HeaderProps {
   userId: string;
@@ -56,7 +58,13 @@ const Header = ({
   }, [userId, email, fullName, profilePictureUrl, bio]);
 
   return (
-    <div className="flex gap-2 items-center justify-center">
+    <div className="flex gap-4 items-center justify-center">
+      <Link
+        href="/dashboard"
+        className="font-bold text-xl hover:bg-white/10 rounded-full p-3"
+      >
+        ARENA
+      </Link>
       <div className="relative lg:w-1/2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -85,6 +93,12 @@ const Header = ({
       <ClerkLoaded>
         <UserButton />
       </ClerkLoaded>
+
+      <Link href={`/notifications`}>
+        <div className="hover:bg-slate-200/10 p-4 rounded-full">
+          <BellRing />
+        </div>
+      </Link>
     </div>
   );
 };

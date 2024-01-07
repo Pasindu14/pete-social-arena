@@ -12,12 +12,12 @@ const Page = async () => {
   return (
     <div>
       {posts?.map((post: any) => {
-        console.log(post);
         return (
           <FeedPost
             postId={post.post_id}
             postDate={post.post_created_at}
             postImage={post.post_image_url}
+            author={post.author_id}
             status={post.post_status}
             profile_picture_url={post.author_profile_picture_url}
             full_name={post.author_full_name}

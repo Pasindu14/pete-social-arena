@@ -12,10 +12,12 @@ import { Comment } from "@/lib/models/comment.model";
 
 const CommentForm = ({
   postId,
+  author,
   onCommentSubmit,
   autoFocus,
 }: {
   postId: string;
+  author: string;
   onCommentSubmit: (comment: any) => void;
   autoFocus: boolean;
 }) => {
@@ -45,6 +47,7 @@ const CommentForm = ({
       comment: comment,
       parentCommentId: null,
       postId: postId,
+      postAuthor: author,
     })) as ResponseHandler<Comment>;
 
     if (response?.success === false) {
