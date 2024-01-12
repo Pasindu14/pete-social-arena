@@ -42,3 +42,33 @@ export async function updateUser(
     );
   }
 }
+
+export async function getUserDetails(
+  userId: string
+): Promise<{ success: boolean; message: string; data?: any; error?: any }> {
+  const responseHandler = new ResponseHandler<any>();
+  try {
+    const { data, error } = await supabase
+      .from("user")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (error != null) {
+      return responseHandler.setError(
+        `Oops! Something went wrong while fetching user details. Please try again!`,
+        error.message
+      );
+    }
+
+    return responseHandler.setSuccess(
+      `User details fetched successfully`,
+      data
+    );
+  } catch (error: any) {
+    return responseHandler.setError(
+      `Oops! Something went wrong while fetching user details. Please try again!`,
+      error.message
+    );
+  }
+}
