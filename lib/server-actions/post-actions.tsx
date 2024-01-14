@@ -62,6 +62,23 @@ export async function fetchPosts(userId: string) {
   }
 }
 
+export async function fetchPostsByUser(userId: string) {
+  try {
+    let { data: posts } = await supabase.rpc(
+      "get_posts_by_user",
+      {
+        check_user_id: userId,
+      },
+      {
+        count: "exact",
+      }
+    );
+    return posts;
+  } catch (error) {
+    return [];
+  }
+}
+
 export async function addLikes(
   userId: string,
   postId: string,
