@@ -64,15 +64,12 @@ export async function fetchPosts(userId: string) {
 
 export async function fetchPostsByUser(userId: string) {
   try {
-    let { data: posts } = await supabase.rpc(
-      "get_posts_by_user",
-      {
-        check_user_id: userId,
-      },
-      {
-        count: "exact",
-      }
-    );
+    let { data: posts, error } = await supabase.rpc("get_posts_by_user", {
+      check_user_id: userId,
+    });
+    if (error) console.error(error);
+    else console.log(posts);
+
     return posts;
   } catch (error) {
     return [];

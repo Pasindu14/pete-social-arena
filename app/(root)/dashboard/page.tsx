@@ -4,10 +4,12 @@ import { getUserId } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs";
 import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 import Feed from "@/components/ui/dashboard/Feed";
+import { fetchPosts } from "@/lib/server-actions/post-actions";
 
 const Page = async () => {
   const user = await currentUser();
-  return <Feed userId={user?.id} />;
+  const posts = await fetchPosts(user?.id!);
+  return <Feed posts={posts} />;
 };
 
 export default Page;

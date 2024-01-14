@@ -5,9 +5,11 @@ import {
 } from "@/lib/server-actions/post-actions";
 import { FeedPost } from "@/components/ui/dashboard/FeedPost";
 
-const Feed = async ({ userId }: { userId: any }) => {
-  const posts = await fetchPostsByUser(userId);
-  console.log(posts);
+type FeedProps = {
+  posts: any;
+};
+
+const Feed = async ({ posts }: FeedProps) => {
   return (
     <div>
       {posts?.map((post: any) => {
