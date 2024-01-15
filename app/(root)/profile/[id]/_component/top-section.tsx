@@ -2,8 +2,14 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { currentUser } from "@clerk/nextjs";
+import { updateFollowers } from "@/lib/server-actions/user-actions";
+import FollowButton from "./follow_button";
 
-const TopSection = ({ user }: { user: any }) => {
+const TopSection = async ({ user }: { user: any }) => {
+  const loggedInUser = await currentUser();
+
   return (
     <div>
       <div className="flex flex-row items-center gap-6">
@@ -14,8 +20,15 @@ const TopSection = ({ user }: { user: any }) => {
           </Avatar>
         </div>
         <div className="flex flex-col gap-2">
-          <h1 className="md:text-4xl">{`${user?.data.full_name}`}</h1>
-          <h1 className="md:text-md"> {`${user?.data.email}`}</h1>
+          <div className="flex flex-row  items-center gap-2">
+            <h1 className="md:text-4xl">{`${user?.data.full_name}`}</h1>
+            {user.data.id != loggedInUser?.id && (
+              <FollowButton
+                targetUserId={user.data.id}
+                followerId={loggedInUser?.id!}
+              />
+            )}
+          </div>
           <h1 className="md:text-sm text-primary">{`${user?.data.followers} Followers`}</h1>
           <h1 className="md:text-sm text-primary">{`${user?.data.following} Following`}</h1>
         </div>

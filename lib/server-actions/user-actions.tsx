@@ -2,6 +2,9 @@
 
 import { supabase } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
+import { logError } from "../logger";
+import { log } from "winston";
+import { revalidatePath } from "next/cache";
 
 export async function updateUser(
   userId: string,
@@ -25,6 +28,7 @@ export async function updateUser(
       ])
       .select();
     if (error != null) {
+      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -55,6 +59,7 @@ export async function getUserDetails(
       .single();
 
     if (error != null) {
+      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong while fetching user details. Please try again!`,
         error.message
@@ -66,9 +71,41 @@ export async function getUserDetails(
       data
     );
   } catch (error: any) {
+    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong while fetching user details. Please try again!`,
       error.message
+    );
+  }
+}
+
+export async function updateFollowers(
+  targetUserId: string,
+  followerId: string
+) {
+  log(targetUserId, followerId);
+  const responseHandler = new ResponseHandler<any>();
+  try {
+    let { data, error } = await supabase.rpc("update_followers", {
+      target_user_id: targetUserId,
+      follower_id: followerId,
+      is_increment: true,
+    });
+
+    if (error) {
+      logError(error);
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error.message
+      );
+    }
+
+    revalidatePath("/profile/user_2Z6sqNjbX7cTZFoV8edkQVOmxHh");
+  } catch (error: any) {
+    logError(error);
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error
     );
   }
 }

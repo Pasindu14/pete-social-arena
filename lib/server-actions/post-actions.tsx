@@ -2,6 +2,7 @@
 
 import { supabase } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
+import { logError } from "../logger";
 
 interface PostParams {
   authorId: string;
@@ -32,12 +33,14 @@ export async function createPost({
       .select();
 
     if (error != null) {
+      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
       );
     }
   } catch (error: any) {
+    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error.message
@@ -47,7 +50,7 @@ export async function createPost({
 
 export async function fetchPosts(userId: string) {
   try {
-    let { data: posts } = await supabase.rpc(
+    let { data: posts, error } = await supabase.rpc(
       "get_posts_with_author_details",
       {
         check_user_id: userId,
@@ -56,6 +59,11 @@ export async function fetchPosts(userId: string) {
         count: "exact",
       }
     );
+
+    if (error) {
+      logError(error);
+      return [];
+    }
     return posts;
   } catch (error) {
     return [];
@@ -67,8 +75,10 @@ export async function fetchPostsByUser(userId: string) {
     let { data: posts, error } = await supabase.rpc("get_posts_by_user", {
       check_user_id: userId,
     });
-    if (error) console.error(error);
-    else console.log(posts);
+    if (error) {
+      logError(error);
+      return [];
+    }
 
     return posts;
   } catch (error) {
@@ -92,12 +102,14 @@ export async function addLikes(
       is_increment: is_increment,
     });
     if (error) {
+      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
       );
     }
   } catch (error: any) {
+    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error
@@ -114,12 +126,14 @@ export async function addComments(postId: string, increment_by: number) {
     });
 
     if (error) {
+      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
       );
     }
   } catch (error: any) {
+    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error

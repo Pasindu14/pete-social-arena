@@ -5,6 +5,7 @@ import ResponseHandler from "../models/response.model";
 import { createClient } from "@supabase/supabase-js";
 import { createNotification } from "./notification-actions";
 import { addComments } from "./post-actions";
+import { logError } from "../logger";
 
 interface CommentParams {
   userId: string;
@@ -43,6 +44,7 @@ export async function createComment({
     await addComments(postId, 1);
 
     if (error != null) {
+      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -53,6 +55,7 @@ export async function createComment({
       { comment: data[0] }
     );
   } catch (error: any) {
+    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error.message
@@ -62,12 +65,17 @@ export async function createComment({
 
 export async function fetchCommentsByPost(postId: string) {
   try {
-    let { data: comments } = await supabaseCacheFreeClient.rpc(
+    let { data: comments, error } = await supabaseCacheFreeClient.rpc(
       "get_comments_details",
       {
         param_post_id: postId,
       }
     );
+
+    if (error) {
+      logError(error);
+      return [];
+    }
     return comments;
   } catch (error) {
     return [];
