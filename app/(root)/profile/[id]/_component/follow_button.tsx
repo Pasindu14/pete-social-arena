@@ -1,7 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { updateFollowers } from "@/lib/server-actions/user-actions";
-import React from "react";
+import {
+  fetchFollowStatus,
+  updateFollowers,
+} from "@/lib/server-actions/user-actions";
+import React, { use, useEffect, useState } from "react";
 
 const FollowButton = ({
   targetUserId,
@@ -10,14 +13,29 @@ const FollowButton = ({
   targetUserId: string;
   followerId: string;
 }) => {
+  const [followStatus, setFollowStatus] = useState(false);
+
+  useEffect(() => {
+    const getFollowStatus = async () => {
+      const result = await fetchFollowStatus(targetUserId, followerId);
+      setFollowStatus(result.data == "true" ? true : false);
+    };
+
+    getFollowStatus();
+  }, []);
+
   const follow = async () => {
-    const result = await updateFollowers(targetUserId, followerId);
-    console.log(result);
+    await updateFollowers(
+      targetUserId,
+      followerId,
+      followStatus ? false : true
+    );
+    setFollowStatus(!followStatus);
   };
   return (
     <div>
       <Button variant="outline" onClick={follow}>
-        Follow
+        {followStatus == true ? "Unfollow" : "Follow"}
       </Button>
     </div>
   );

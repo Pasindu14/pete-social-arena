@@ -13,7 +13,6 @@ class ResponseHandler<T> {
         this.success = true;
         this.message = message;
         if (data) this.data = data;
-
         return {
             success: this.success,
             message: this.message,

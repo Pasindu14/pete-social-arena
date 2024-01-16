@@ -1,16 +1,21 @@
 import { currentUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
-import { getUserDetails } from "@/lib/server-actions/user-actions";
+import {
+  fetchFollowStatus,
+  getUserDetails,
+} from "@/lib/server-actions/user-actions";
 import TopSection from "./_component/top-section";
 import Feed from "@/components/ui/dashboard/Feed";
-import {
-  fetchPosts,
-  fetchPostsByUser,
-} from "@/lib/server-actions/post-actions";
+import { fetchPostsByUser } from "@/lib/server-actions/post-actions";
+import { redirect } from "next/navigation";
 
 const Profile = async ({ params }: { params: { id: string } }) => {
   const user = await getUserDetails(params.id);
+
+  if (!user.data) {
+    redirect("/404");
+  }
   const posts = await fetchPostsByUser(user.data.id);
 
   return (

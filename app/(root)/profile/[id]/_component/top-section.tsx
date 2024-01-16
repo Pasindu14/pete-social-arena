@@ -29,8 +29,8 @@ const TopSection = async ({ user }: { user: any }) => {
               />
             )}
           </div>
-          <h1 className="md:text-sm text-primary">{`${user?.data.followers} Followers`}</h1>
-          <h1 className="md:text-sm text-primary">{`${user?.data.following} Following`}</h1>
+          <h1 className="md:text-sm text-primary">{`${user?.data.followers_count} Followers`}</h1>
+          <h1 className="md:text-sm text-primary">{`${user?.data.following_count} Following`}</h1>
         </div>
       </div>
       <Separator className="mt-4" />

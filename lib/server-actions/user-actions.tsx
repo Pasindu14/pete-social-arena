@@ -1,9 +1,8 @@
 "use server";
 
-import { supabase } from "@/utils/server";
+import { supabase, supabaseCacheFreeClient } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
 import { logError } from "../logger";
-import { log } from "winston";
 import { revalidatePath } from "next/cache";
 
 export async function updateUser(
@@ -15,7 +14,7 @@ export async function updateUser(
 ) {
   const responseHandler = new ResponseHandler<any>();
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseCacheFreeClient
       .from("user")
       .upsert([
         {
@@ -56,7 +55,7 @@ export async function getUserDetails(
       .from("user")
       .select("*")
       .eq("id", userId)
-      .single();
+      .maybeSingle();
 
     if (error != null) {
       logError(error);
@@ -81,15 +80,15 @@ export async function getUserDetails(
 
 export async function updateFollowers(
   targetUserId: string,
-  followerId: string
+  followerId: string,
+  is_increment: boolean
 ) {
-  log(targetUserId, followerId);
   const responseHandler = new ResponseHandler<any>();
   try {
-    let { data, error } = await supabase.rpc("update_followers", {
+    let { error } = await supabaseCacheFreeClient.rpc("update_followers", {
       target_user_id: targetUserId,
       follower_id: followerId,
-      is_increment: true,
+      is_increment: is_increment,
     });
 
     if (error) {
@@ -100,7 +99,43 @@ export async function updateFollowers(
       );
     }
 
-    revalidatePath("/profile/user_2Z6sqNjbX7cTZFoV8edkQVOmxHh");
+    revalidatePath(`/profile/${targetUserId}`);
+  } catch (error: any) {
+    logError(error);
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error
+    );
+  }
+}
+
+export async function fetchFollowStatus(
+  targetUser: string,
+  loggedInUser: string
+): Promise<{ success: boolean; message: string; data?: any; error?: any }> {
+  const responseHandler = new ResponseHandler<any>();
+
+  try {
+    let { data, error } = await supabaseCacheFreeClient.rpc(
+      "check_user_follow_status",
+      {
+        target_user_id: targetUser,
+        logged_in_user_id: loggedInUser,
+      }
+    );
+
+    if (error) {
+      logError(error);
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error.message
+      );
+    }
+
+    return responseHandler.setSuccess(
+      `Succefully retrieved follow status`,
+      data.toString()
+    );
   } catch (error: any) {
     logError(error);
     return responseHandler.setError(
