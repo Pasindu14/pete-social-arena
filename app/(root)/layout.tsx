@@ -22,7 +22,7 @@ export default async function RootLayout({
   const user = await currentUser();
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning={true}>
         <head />
         <body className={heebo.className}>
           <ThemeProvider

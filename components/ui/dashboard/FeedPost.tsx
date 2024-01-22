@@ -37,8 +37,6 @@ export async function FeedPost({
   post_likes_count,
   post_comments_count,
 }: FeedPostProps) {
-  /*   const datat = await fetchCommentsByPost(postId);
-  console.log(datat); */
   return (
     <div className="flex flex-col items-center justify-center">
       <section
@@ -50,6 +48,7 @@ export async function FeedPost({
               profile_picture_url={profile_picture_url}
               full_name={full_name}
               postDate={postDate}
+              userId={author}
             />
 
             <div>

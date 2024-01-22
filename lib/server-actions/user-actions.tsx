@@ -98,7 +98,7 @@ export async function updateFollowers(
         error.message
       );
     }
-
+    revalidatePath(`/profile/${followerId}`);
     revalidatePath(`/profile/${targetUserId}`);
   } catch (error: any) {
     logError(error);
@@ -136,6 +136,33 @@ export async function fetchFollowStatus(
       `Succefully retrieved follow status`,
       data.toString()
     );
+  } catch (error: any) {
+    logError(error);
+    return responseHandler.setError(
+      `Oops! Something went wrong. Please try again !`,
+      error
+    );
+  }
+}
+
+export async function updateBio(userId: string, bio: string) {
+  const responseHandler = new ResponseHandler<any>();
+  try {
+    const { data, error } = await supabaseCacheFreeClient
+      .from("user")
+      .update({ bio: bio })
+      .eq("id", userId)
+      .select();
+
+    if (error) {
+      logError(error);
+      return responseHandler.setError(
+        `Oops! Something went wrong. Please try again !`,
+        error.message
+      );
+    }
+    revalidatePath(`/profile/${userId}`);
+    return responseHandler.setSuccess("Bio updated successfully", data);
   } catch (error: any) {
     logError(error);
     return responseHandler.setError(

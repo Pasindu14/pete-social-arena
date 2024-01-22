@@ -1,17 +1,20 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFormattedDateTime, getInitials } from "@/lib/utils";
+import Link from "next/link";
 
 type SubmissionCardProps = {
   profile_picture_url: string;
   full_name: string;
   postDate: Date | null;
+  userId: string;
 };
 
 const SubmissionCard = ({
   profile_picture_url,
   full_name,
   postDate,
+  userId,
 }: SubmissionCardProps) => {
   return (
     <div>
@@ -21,7 +24,9 @@ const SubmissionCard = ({
           <AvatarFallback>{getInitials(full_name)}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col justify-center ">
-          <h4 className="text-[12px] md:text-[16px]"> {full_name}</h4>
+          <h4 className="text-[12px] md:text-[16px]">
+            <Link href={`/profile/${userId}`}> {full_name}</Link>
+          </h4>
           {postDate && (
             <h4 className="text-[10px]"> {getFormattedDateTime(postDate)}</h4>
           )}

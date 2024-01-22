@@ -19,7 +19,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
   const posts = await fetchPostsByUser(user.data.id);
 
   return (
-    <div className="container mx-auto mt-4">
+    <div className="  mt-4">
       <TopSection user={user} />
       <Feed posts={posts} />
     </div>
