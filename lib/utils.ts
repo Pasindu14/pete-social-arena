@@ -84,3 +84,34 @@ export const getNotificationType = (type: string) => {
     return "unknown notification type";
   }
 };
+
+
+export const formatLikes = (likes: number, isLikedByCurrentUser: boolean) => {
+  if (likes === 0 && isLikedByCurrentUser == false) {
+    return "";
+  }
+  else if (likes === 0 && isLikedByCurrentUser == true) {
+    return `You like this`;
+  }
+  else if (likes >= 2 && isLikedByCurrentUser == true) {
+    return `You and ${likes} others`;
+  }
+  else if (likes == 1 && isLikedByCurrentUser == true) {
+    return `You like this`;
+  }
+  else if (likes == 1 && isLikedByCurrentUser == false) {
+    return "";
+  }
+  else {
+    return `${likes} likes`;
+  }
+}
+
+export const formatComments = (comments: number) => {
+  if (comments === 0) {
+    return "";
+  }
+  else {
+    return `${comments} comments`;
+  }
+}

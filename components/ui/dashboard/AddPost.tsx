@@ -58,7 +58,13 @@ const AddPost = () => {
         imageUrl: uploadImageUrl,
         status: values.status,
       };
-      createPost(data);
+      const result = await createPost(data);
+
+      if (!result.success) {
+        toast.error("Failed to create the post. Please try again.");
+        return;
+      }
+
       toast.success("Succesfully created the post");
       form.reset();
       setFiles([]);

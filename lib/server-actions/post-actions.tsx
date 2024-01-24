@@ -3,6 +3,7 @@
 import { supabase } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
 import { logError } from "../logger";
+import { revalidatePath } from "next/cache";
 
 interface PostParams {
   authorId: string;
@@ -39,6 +40,8 @@ export async function createPost({
         error.message
       );
     }
+    revalidatePath("/dashboard");
+    return responseHandler.setSuccess("Successfully created the post");
   } catch (error: any) {
     logError(error);
     return responseHandler.setError(

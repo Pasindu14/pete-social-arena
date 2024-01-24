@@ -1,5 +1,5 @@
-"use server";
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { primaryColor } from "@/constants/colors";
@@ -11,6 +11,8 @@ import { Button } from "../button";
 import CommentButton from "@/components/common/CommentButton";
 import Test from "@/components/common/Test";
 import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
+import { formatComments, formatLikes } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 
 interface FeedPostProps {
   postId: string;
@@ -25,7 +27,7 @@ interface FeedPostProps {
   post_comments_count: number;
 }
 
-export async function FeedPost({
+export function FeedPost({
   postId,
   postDate,
   postImage,
@@ -37,11 +39,20 @@ export async function FeedPost({
   post_likes_count,
   post_comments_count,
 }: FeedPostProps) {
+  const [likesText, setLikesText] = useState(
+    formatLikes(post_likes_count, is_liked_by_current_user)
+  );
+  const [commentsText, setCommentsText] = useState(
+    formatComments(post_comments_count)
+  );
+  const likeCallback = async (isLiked: boolean) => {
+    setLikesText(formatLikes(post_likes_count, isLiked));
+  };
+
+  const commentCallback = async () => {};
   return (
     <div className="flex flex-col items-center justify-center">
-      <section
-        className={`mt-4 bg-[${primaryColor}] md:w-3/5 w-full p-4 rounded-xl bg-opacity-5`}
-      >
+      <section className={`mt-4 md:w-3/5 w-full p-4 rounded-xl bg-[#110e0e8f]`}>
         <div className="flex items-center justify-center">
           <div className="grid md:grid-cols-1 md:w-[50vw]">
             <SubmissionCard
@@ -69,12 +80,7 @@ export async function FeedPost({
             )}
             <p className="mt-4">{status}</p>
             <div className="flex justify-between gap-4 mt-2">
-              {post_likes_count > 0 ? (
-                <h4 className="text-xs">{`${post_likes_count} likes`}</h4>
-              ) : (
-                <h4></h4>
-              )}
-
+              <h4 className="text-xs">{`${likesText}`}</h4>
               {post_comments_count > 0 ? (
                 <h4 className="text-xs">{`${post_comments_count} comments`}</h4>
               ) : (
@@ -89,6 +95,7 @@ export async function FeedPost({
                 postId={String(postId)}
                 is_liked_by_user={is_liked_by_current_user}
                 iconSize={25}
+                likeCallback={likeCallback}
               />
 
               <CommentSection

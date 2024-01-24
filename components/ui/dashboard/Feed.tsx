@@ -1,8 +1,6 @@
-import React from "react";
-import {
-  fetchPosts,
-  fetchPostsByUser,
-} from "@/lib/server-actions/post-actions";
+"use server";
+
+import React, { createContext } from "react";
 import { FeedPost } from "@/components/ui/dashboard/FeedPost";
 
 type FeedProps = {

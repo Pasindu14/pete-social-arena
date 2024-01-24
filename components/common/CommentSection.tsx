@@ -121,6 +121,7 @@ const CommentSection = ({
                   profile_picture_url={profile_picture_url}
                   full_name={full_name}
                   postDate={postDate}
+                  userId={author}
                 />
                 <Separator className="mt-4" />
                 <p className="mt-2">{status}</p>
@@ -141,7 +142,6 @@ const CommentSection = ({
                   author={author}
                   onCommentSubmit={(comment: any) => {
                     fetchedAndSetComments();
-                    //console.log(comment);
                   }}
                   autoFocus={focusCommentInput}
                 />
@@ -162,6 +162,7 @@ const CommentSection = ({
                     profile_picture_url={profile_picture_url}
                     full_name={full_name}
                     postDate={postDate}
+                    userId={author}
                   />
                   <h4 className="px-12 mt-6 mb-6">{status}</h4>
 

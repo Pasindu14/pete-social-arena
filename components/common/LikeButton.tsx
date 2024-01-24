@@ -11,9 +11,15 @@ interface LikeProps {
   postId: string;
   is_liked_by_user: boolean;
   iconSize: number;
+  likeCallback?: (isLiked: boolean) => Promise<void>;
 }
 
-const LikeButton = ({ postId, is_liked_by_user, iconSize }: LikeProps) => {
+const LikeButton = ({
+  postId,
+  is_liked_by_user,
+  iconSize,
+  likeCallback,
+}: LikeProps) => {
   const { user } = useUser();
   const [isLiked, setIsLiked] = useState(is_liked_by_user);
   const likePressed = async () => {
@@ -24,6 +30,9 @@ const LikeButton = ({ postId, is_liked_by_user, iconSize }: LikeProps) => {
         toast.error(
           `Oops! Something went wrong. Please try again ! ${response.error}`
         );
+      }
+      if (likeCallback) {
+        likeCallback(!isLiked);
       }
     } catch (error) {
       toast.error("Oops! Something went wrong. Please try again !");
