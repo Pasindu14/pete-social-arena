@@ -3,19 +3,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFormattedDateTime, getInitials } from "@/lib/utils";
 import Link from "next/link";
 
-type SubmissionCardProps = {
-  profile_picture_url: string;
-  full_name: string;
-  postDate: Date | null;
-  userId: string;
-};
-
-const SubmissionCard = ({
+const UserActivityCard = ({
   profile_picture_url,
   full_name,
   postDate,
-  userId,
-}: SubmissionCardProps) => {
+  user,
+}: {
+  profile_picture_url: string;
+  full_name: string;
+  postDate: Date;
+  user: string;
+}) => {
   return (
     <div>
       <div className="flex md:gap-4 gap-2 items-center">
@@ -25,10 +23,10 @@ const SubmissionCard = ({
         </Avatar>
         <div className="flex flex-col justify-center ">
           <h4 className="text-[12px] md:text-[16px]">
-            <Link href={`/profile/${userId}`}> {full_name}</Link>
+            <Link href={`/profile/${user}`}> {full_name}</Link>
           </h4>
           {postDate && (
-            <h4 className="text-[10px]"> {getFormattedDateTime(postDate)}</h4>
+            <h4 className="text-[10px]">{getFormattedDateTime(postDate)}</h4>
           )}
         </div>
       </div>
@@ -36,4 +34,4 @@ const SubmissionCard = ({
   );
 };
 
-export default SubmissionCard;
+export default UserActivityCard;

@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import secureLocalStorage from "react-secure-storage";
 import { twMerge } from "tailwind-merge"
 
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -87,25 +88,21 @@ export const getNotificationType = (type: string) => {
 
 
 export const formatLikes = (likes: number, isLikedByCurrentUser: boolean) => {
-  if (likes === 0 && isLikedByCurrentUser == false) {
+  if (likes === 0) {
     return "";
+  } else if (likes === 1 && isLikedByCurrentUser == false) {
+    return `1 like`;
   }
-  else if (likes === 0 && isLikedByCurrentUser == true) {
+  else if (likes === 1 && isLikedByCurrentUser == true) {
     return `You like this`;
   }
   else if (likes >= 2 && isLikedByCurrentUser == true) {
-    return `You and ${likes} others`;
-  }
-  else if (likes == 1 && isLikedByCurrentUser == true) {
-    return `You like this`;
-  }
-  else if (likes == 1 && isLikedByCurrentUser == false) {
+    return `You and ${likes - 1} others`;
+  } else {
     return "";
   }
-  else {
-    return `${likes} likes`;
-  }
 }
+
 
 export const formatComments = (comments: number) => {
   if (comments === 0) {

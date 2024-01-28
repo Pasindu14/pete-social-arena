@@ -18,7 +18,7 @@ import { Separator } from "../ui/separator";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import CommentForm from "./CommentForm";
-import SubmissionCard from "./SubmissionCard";
+import UserActivityCard from "./SubmissionCard";
 import CommentsCard from "./CommentsCard";
 import CommentButton from "./CommentButton";
 import { Loader, LoaderFull } from "./Loader";
@@ -29,29 +29,7 @@ import { Comment } from "@/lib/models/comment.model";
 import toast from "react-hot-toast";
 import CommentButtonInDialog from "./CommentButtonInDialog";
 
-interface CommentProps {
-  postId: string;
-  postDate: Date;
-  postImage: string;
-  author: string;
-  status: string;
-  profile_picture_url: string;
-  full_name: string;
-  is_liked_by_current_user: boolean;
-}
-
-export const revalidate = 0;
-
-const CommentSection = ({
-  postId,
-  postDate,
-  postImage,
-  author,
-  status,
-  profile_picture_url,
-  full_name,
-  is_liked_by_current_user,
-}: CommentProps) => {
+const CommentSection = ({ post }: { post: Post }) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState<Comment[] | null>([]);
   const [focusCommentInput, setFocusCommentInput] = useState(false);
@@ -72,7 +50,7 @@ const CommentSection = ({
   };
 
   const fetchedAndSetComments = async () => {
-    const fetchedComments = await fetchCommentsByPost(postId);
+    const fetchedComments = await fetchCommentsByPost(post.postId);
     setComments(fetchedComments);
   };
 
@@ -91,7 +69,7 @@ const CommentSection = ({
         </DialogTrigger>
         <DialogContent
           className={` ${
-            postImage ? "sm:max-w-7xl" : "sm:max-w-3xl"
+            post.postImage ? "sm:max-w-7xl" : "sm:max-w-3xl"
           }  p-4 max-h-[75vh] overflow-y-auto custom-scrollbar`}
         >
           {loading && (
@@ -100,14 +78,14 @@ const CommentSection = ({
             </div>
           )}
           {/* only render this section if there are images and comments */}
-          {!loading && comments && postImage && (
+          {!loading && comments && post.postImage && (
             <div className="grid md:grid-cols-7 mt-5">
               <div className="md:col-span-5">
-                {postImage && (
+                {post.postImage && (
                   <div className="relative md:h-full h-[25vh]">
                     <Image
                       fill
-                      src={postImage}
+                      src={post.postImage}
                       alt=""
                       objectFit="cover"
                       className="rounded-xl"
@@ -117,29 +95,29 @@ const CommentSection = ({
                 )}
               </div>
               <div className="md:col-span-2 md:p-6 p-2 ">
-                <SubmissionCard
-                  profile_picture_url={profile_picture_url}
-                  full_name={full_name}
-                  postDate={postDate}
-                  userId={author}
+                <UserActivityCard
+                  postDate={post.postDate}
+                  user={post.author}
+                  full_name={post.full_name}
+                  profile_picture_url={post.profile_picture_url}
                 />
                 <Separator className="mt-4" />
-                <p className="mt-2">{status}</p>
+                <p className="mt-2">{post.status}</p>
                 <div className="flex items-center justify-between gap-1 mt-2">
                   <LikeButton
-                    postId={String(postId)}
-                    is_liked_by_user={is_liked_by_current_user}
+                    postId={String(post.postId)}
+                    is_liked_by_user={post.is_liked_by_current_user}
                     iconSize={15}
                   />
                   <CommentButtonInDialog
                     onButtonClick={handleCommentButtonClick}
                   />
-                  <ShareButton postId={String(postId)} />
+                  <ShareButton postId={String(post.postId)} />
                 </div>
 
                 <CommentForm
-                  postId={postId}
-                  author={author}
+                  postId={post.postId}
+                  author={post.author}
                   onCommentSubmit={(comment: any) => {
                     fetchedAndSetComments();
                   }}
@@ -148,42 +126,42 @@ const CommentSection = ({
 
                 <Separator className="mt-2" />
 
-                {<CommentsCard comments={comments} />}
+                {<CommentsCard comments={comments} post={post} />}
               </div>
             </div>
           )}
 
           {/* Render comments without image */}
-          {!loading && !postImage && (
+          {!loading && !post.postImage && (
             <>
               <div className="flex items-center justify-center">
                 <div className="w-full">
-                  <SubmissionCard
-                    profile_picture_url={profile_picture_url}
-                    full_name={full_name}
-                    postDate={postDate}
-                    userId={author}
+                  <UserActivityCard
+                    postDate={post.postDate}
+                    user={post.author}
+                    full_name={post.full_name}
+                    profile_picture_url={post.profile_picture_url}
                   />
-                  <h4 className="px-12 mt-6 mb-6">{status}</h4>
+                  <h4 className="px-12 mt-6 mb-6">{post.status}</h4>
 
                   <div className="">
                     <Separator className="mt-4" />
                     <div className="flex items-center  gap-1 mt-2">
                       <LikeButton
-                        postId={String(postId)}
-                        is_liked_by_user={is_liked_by_current_user}
+                        postId={String(post.postId)}
+                        is_liked_by_user={post.is_liked_by_current_user}
                         iconSize={15}
                       />
 
                       <CommentButtonInDialog
                         onButtonClick={handleCommentButtonClick}
                       />
-                      <ShareButton postId={String(postId)} />
+                      <ShareButton postId={String(post.postId)} />
                     </div>
 
                     <CommentForm
-                      postId={postId}
-                      author={author}
+                      postId={post.postId}
+                      author={post.author}
                       onCommentSubmit={(comment: Comment) => {
                         fetchedAndSetComments();
                       }}
@@ -192,7 +170,7 @@ const CommentSection = ({
 
                     <Separator className="mt-2" />
 
-                    {<CommentsCard comments={comments} />}
+                    {<CommentsCard comments={comments} post={post} />}
                   </div>
                 </div>
               </div>

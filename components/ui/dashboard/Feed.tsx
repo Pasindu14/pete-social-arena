@@ -1,7 +1,5 @@
-"use server";
-
 import React, { createContext } from "react";
-import { FeedPost } from "@/components/ui/dashboard/FeedPost";
+import { PostItem } from "@/components/ui/dashboard/PostItem";
 
 type FeedProps = {
   posts: any;
@@ -12,7 +10,7 @@ const Feed = async ({ posts }: FeedProps) => {
     <div>
       {posts?.map((post: any) => {
         return (
-          <FeedPost
+          <PostItem
             postId={post.post_id}
             postDate={post.post_created_at}
             postImage={post.post_image_url}
