@@ -1,7 +1,7 @@
 import React from "react";
 
 import { currentUser } from "@clerk/nextjs";
-import Feed from "@/components/ui/dashboard/Feed";
+import Feed from "@/components/ui/dashboard/feed";
 import { fetchPosts } from "@/lib/server-actions/post-actions";
 
 const Page = async () => {

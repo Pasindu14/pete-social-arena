@@ -1,5 +1,5 @@
-import Header from "@/components/common/Header";
-import { LoaderFull } from "@/components/common/Loader";
+import Header from "@/components/common/header";
+import { LoaderFull } from "@/components/common/loader";
 import { primaryColor } from "@/constants/colors";
 import { currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";

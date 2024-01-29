@@ -1,5 +1,5 @@
 "use client";
-import { Loader } from "@/components/common/Loader";
+import { Loader } from "@/components/common/loader";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

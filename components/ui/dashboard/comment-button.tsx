@@ -2,34 +2,30 @@
 
 import { primaryColor } from "@/constants/colors";
 import { MessageCircle } from "lucide-react";
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { cache } from "react";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTrigger,
-} from "../ui/dialog";
+import React, { useState } from "react";
+import { Button } from "../button";
+import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "../dialog";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getFormattedDateTime, getInitials } from "@/lib/utils";
-import { Separator } from "../ui/separator";
-import LikeButton from "./LikeButton";
-import ShareButton from "./ShareButton";
-import CommentForm from "./CommentForm";
-import UserActivityCard from "./SubmissionCard";
-import CommentsCard from "./CommentsCard";
-import CommentButton from "./CommentButton";
-import { Loader, LoaderFull } from "./Loader";
+import { Separator } from "../separator";
+import LikeButton from "../../common/like-button";
+import ShareButton from "../../common/share-button";
+import CommentForm from "../../common/comment-form";
+import UserActivityCard from "../../common/user-activity-card";
+import CommentsFeed from "../../common/comments-feed";
+import { Loader } from "../../common/loader";
 
 import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
-import { revalidatePath } from "next/cache";
 import { Comment } from "@/lib/models/comment.model";
 import toast from "react-hot-toast";
-import CommentButtonInDialog from "./CommentButtonInDialog";
+import CommentButtonInDialog from "../../common/comment-buttonIn-dialog";
 
-const CommentSection = ({ post }: { post: Post }) => {
+const CommentButton = ({
+  post,
+  commentCallback,
+}: {
+  post: Post;
+  commentCallback?: (count: number) => Promise<void>;
+}) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState<Comment[] | null>([]);
   const [focusCommentInput, setFocusCommentInput] = useState(false);
@@ -51,6 +47,9 @@ const CommentSection = ({ post }: { post: Post }) => {
 
   const fetchedAndSetComments = async () => {
     const fetchedComments = await fetchCommentsByPost(post.postId);
+    if (commentCallback) {
+      commentCallback(fetchedComments.length);
+    }
     setComments(fetchedComments);
   };
 
@@ -126,7 +125,7 @@ const CommentSection = ({ post }: { post: Post }) => {
 
                 <Separator className="mt-2" />
 
-                {<CommentsCard comments={comments} post={post} />}
+                {<CommentsFeed comments={comments} post={post} />}
               </div>
             </div>
           )}
@@ -170,19 +169,12 @@ const CommentSection = ({ post }: { post: Post }) => {
 
                     <Separator className="mt-2" />
 
-                    {<CommentsCard comments={comments} post={post} />}
+                    {<CommentsFeed comments={comments} post={post} />}
                   </div>
                 </div>
               </div>
             </>
           )}
-          {/* 
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader> */}
           <DialogFooter></DialogFooter>
         </DialogContent>
       </Dialog>
@@ -190,4 +182,4 @@ const CommentSection = ({ post }: { post: Post }) => {
   );
 };
 
-export default CommentSection;
+export default CommentButton;

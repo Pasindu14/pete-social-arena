@@ -1,5 +1,6 @@
-import React, { createContext } from "react";
-import { PostItem } from "@/components/ui/dashboard/PostItem";
+import React from "react";
+import { PostItem } from "@/components/ui/dashboard/post-item";
+import { postcss } from "tailwindcss";
 
 type FeedProps = {
   posts: any;

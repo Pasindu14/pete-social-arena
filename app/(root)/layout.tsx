@@ -3,9 +3,9 @@ import { Heebo } from "next/font/google";
 import "../globals.css";
 import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import Footer from "@/components/common/Footer";
+
 import { Toaster } from "react-hot-toast";
-import Header from "@/components/common/Header";
+import Header from "@/components/common/header";
 
 const heebo = Heebo({ subsets: ["latin"] });
 

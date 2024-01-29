@@ -145,6 +145,21 @@ export async function fetchFollowStatus(
   }
 }
 
+export async function fetchUsersByName(filter: string) {
+  console.log(filter);
+  let { data: users, error } = await supabaseCacheFreeClient
+    .from("user")
+    .select("*")
+    .ilike("full_name", `%${filter}%`);
+
+  if (error != null) {
+    logError(error);
+    return [];
+  }
+
+  return users ?? [];
+}
+
 export async function updateBio(userId: string, bio: string) {
   const responseHandler = new ResponseHandler<any>();
   try {

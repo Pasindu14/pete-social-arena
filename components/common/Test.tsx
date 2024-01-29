@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
-import { Loader } from "./Loader";
+import { Loader } from "./loader";
 import { primaryColor } from "@/constants/colors";
 
 const Test = () => {

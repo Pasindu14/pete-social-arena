@@ -13,17 +13,25 @@ export const usePost = (initialPost: Post) => {
     });
   };
 
+  const commentPost = async (count: number) => {
+    setPost({
+      ...post,
+      post_comments_count: count,
+    });
+  };
+
   const likeText = useMemo(() => {
     return formatLikes(post.post_likes_count, post.is_liked_by_current_user);
   }, [post.post_likes_count, post.is_liked_by_current_user]);
 
   const commentText = useMemo(() => {
     return formatComments(post.post_comments_count);
-  }, [post.post_likes_count]);
+  }, [post.post_comments_count]);
 
   return {
     post,
     likePost,
+    commentPost,
     likeText,
     commentText,
   };

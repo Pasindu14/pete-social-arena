@@ -1,11 +1,3 @@
-/**
- * ShareButton component displays a button that opens a dialog for sharing a post.
- *
- * It takes a postId prop and generates a shareable URL for that post.
- * Renders a Dialog with the post URL that can be copied to the clipboard.
- * Uses React state and effects to update the URL on prop change.
- * Handles click to copy URL and show success toast notification.
- */
 "use client";
 
 import { primaryColor } from "@/constants/colors";

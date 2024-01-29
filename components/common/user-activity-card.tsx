@@ -11,7 +11,7 @@ const UserActivityCard = ({
 }: {
   profile_picture_url: string;
   full_name: string;
-  postDate: Date;
+  postDate?: Date;
   user: string;
 }) => {
   return (

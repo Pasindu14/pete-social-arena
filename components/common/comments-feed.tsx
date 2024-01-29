@@ -1,11 +1,11 @@
-import React from "react";
-import UserActivityCard from "./SubmissionCard";
+import React, { memo } from "react";
+import UserActivityCard from "./user-activity-card";
 
 type CommentProps = {
   comments: any;
   post: Post;
 };
-const CommentsCard = ({ comments, post }: CommentProps) => {
+const CommentsFeed = ({ comments, post }: CommentProps) => {
   return (
     <div
       className={`p-2 ${
@@ -13,7 +13,6 @@ const CommentsCard = ({ comments, post }: CommentProps) => {
       }    overflow-y-scroll custom-scrollbar`}
     >
       {comments.map((comment: any) => {
-        console.log(comment.full_name);
         return (
           <div
             key={comment.comment_id}
@@ -36,4 +35,4 @@ const CommentsCard = ({ comments, post }: CommentProps) => {
   );
 };
 
-export default CommentsCard;
+export default memo(CommentsFeed);

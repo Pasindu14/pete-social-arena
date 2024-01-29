@@ -1,15 +1,16 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
-import AddPost from "../ui/dashboard/AddPost";
+import AddPost from "../ui/dashboard/add-post";
 import { loaderColor } from "@/constants/colors";
 import { updateUser } from "@/lib/server-actions/user-actions";
 import toast from "react-hot-toast";
 import { getUserInitialLogin, setUserInitialLogin } from "@/lib/utils";
-import { Loader } from "./Loader";
+import { Loader } from "./loader";
 import { BellRing } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   userId: string;
@@ -26,6 +27,9 @@ const Header = ({
   profilePictureUrl,
   bio,
 }: HeaderProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
   useEffect(() => {
     const handleUserUpdate = async () => {
       let userInitialLogin = getUserInitialLogin();
@@ -53,9 +57,22 @@ const Header = ({
       }
     };
 
-    // Call the async function
     handleUserUpdate();
   }, [userId, email, fullName, profilePictureUrl, bio]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        router.push("/search?p=" + inputRef.current?.value);
+      }
+    };
+
+    inputRef.current?.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      inputRef.current?.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div className="flex gap-4 items-center justify-center">
@@ -80,7 +97,12 @@ const Header = ({
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <Input type="text" placeholder="Search" className="pl-12 pr-4" />
+        <Input
+          type="text"
+          placeholder="Search"
+          className="pl-12 pr-4"
+          ref={inputRef}
+        />
       </div>
 
       <div className="flex flex-row justify-between items-center">

@@ -2,15 +2,16 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import LikeButton from "@/components/common/LikeButton";
-import CommentSection from "@/components/common/CommentSection";
-import ShareButton from "@/components/common/ShareButton";
-import UserActivityCard from "@/components/common/SubmissionCard";
+import LikeButton from "@/components/common/like-button";
+import CommentButton from "@/components/ui/dashboard/comment-button";
+import ShareButton from "@/components/common/share-button";
+import UserActivityCard from "@/components/common/user-activity-card";
 import { usePost } from "@/hooks/usePost";
 import EngagementCounter from "@/components/common/engagement-counter";
 
 export function PostItem(postParam: Post) {
-  const { post, likePost, likeText, commentText } = usePost(postParam);
+  const { post, likePost, commentPost, likeText, commentText } =
+    usePost(postParam);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -50,8 +51,7 @@ export function PostItem(postParam: Post) {
                 iconSize={25}
                 likeCallback={likePost}
               />
-
-              <CommentSection post={post} />
+              <CommentButton post={post} commentCallback={commentPost} />
 
               <ShareButton postId={String(post.postId)} />
             </div>

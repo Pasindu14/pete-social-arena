@@ -6,7 +6,7 @@ import {
   getUserDetails,
 } from "@/lib/server-actions/user-actions";
 import TopSection from "./_component/top-section";
-import Feed from "@/components/ui/dashboard/Feed";
+import Feed from "@/components/ui/dashboard/feed";
 import { fetchPostsByUser } from "@/lib/server-actions/post-actions";
 import { redirect } from "next/navigation";
 

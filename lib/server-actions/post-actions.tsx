@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/utils/server";
+import { supabase, supabaseCacheFreeClient } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
 import { logError } from "../logger";
 import { revalidatePath } from "next/cache";
@@ -141,5 +141,29 @@ export async function addComments(postId: string, increment_by: number) {
       `Oops! Something went wrong. Please try again !`,
       error
     );
+  }
+}
+
+export async function fetchPostsByStatus(filter: string, userId: string) {
+  try {
+    let { data: posts, error } = await supabaseCacheFreeClient.rpc(
+      "get_user_posts_with_filter",
+      {
+        check_user_id: userId,
+        status_param: "%" + filter + "%",
+      },
+      {
+        count: "exact",
+      }
+    );
+
+    if (error) {
+      logError(error);
+      return [];
+    }
+
+    return posts;
+  } catch (error) {
+    return [];
   }
 }

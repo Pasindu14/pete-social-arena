@@ -1,0 +1,24 @@
+import { fetchPostsByStatus } from "@/lib/server-actions/post-actions";
+import { fetchUsersByName } from "@/lib/server-actions/user-actions";
+import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
+
+export const useSearch = (param: string) => {
+  const { user } = useUser();
+  const [search, setSearch] = useState<string>(param);
+
+  const filterPeopleSearch = async () => {
+    const result = fetchUsersByName(search);
+    return result;
+  };
+
+  const filterPostsSearch = async () => {
+    const result = fetchPostsByStatus(search, user?.id!);
+    return result;
+  };
+
+  return {
+    filterPostsSearch,
+    filterPeopleSearch,
+  };
+};

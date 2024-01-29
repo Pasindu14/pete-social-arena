@@ -6,7 +6,6 @@ import { primaryColor, secondaryColor } from "@/constants/colors";
 import { addLikes } from "@/lib/server-actions/post-actions";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
-import { set } from "mongoose";
 
 interface LikeProps {
   postId: string;
