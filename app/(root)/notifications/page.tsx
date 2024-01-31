@@ -1,4 +1,4 @@
-import NotificationCard from "@/components/ui/notifications/notification-card";
+import NotificationCard from "@/app/(root)/notifications/_component/notification-card";
 import { Separator } from "@/components/ui/separator";
 import { fetchNotificationsByUser } from "@/lib/server-actions/notification-actions";
 import { currentUser } from "@clerk/nextjs";

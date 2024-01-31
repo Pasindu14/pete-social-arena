@@ -1,12 +1,23 @@
 import React from "react";
 import PeopleResultItem from "./people-result-item";
-import { PostItem } from "../dashboard/post-item";
+import { PostItem } from "../../dashboard/_component/post-item";
+import Image from "next/image";
 
 const SearchResult = ({ id, datas }: { id: number; datas: any }) => {
   if (datas.length === 0) {
     return (
       <div className="flex justify-center items-center w-full h-full min-h-[50vh]">
-        <p className="text-3xl">No data found</p>
+        <Image
+          src="/no_data.svg"
+          alt="Logo"
+          style={{
+            width: "50%",
+            height: "auto",
+          }}
+          width={500}
+          height={300}
+          className="p-20"
+        />
       </div>
     );
   }

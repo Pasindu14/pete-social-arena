@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
-import AddPost from "../ui/dashboard/add-post";
+import AddPost from "../../app/(root)/dashboard/_component/add-post";
 import { loaderColor } from "@/constants/colors";
 import { updateUser } from "@/lib/server-actions/user-actions";
 import toast from "react-hot-toast";
@@ -75,7 +75,7 @@ const Header = ({
   }, []);
 
   return (
-    <div className="flex gap-4 items-center justify-center">
+    <div className="flex gap-4 items-center justify-center mt-4">
       <Link
         href="/dashboard"
         className="font-bold text-xl hover:bg-white/10 rounded-full p-3"

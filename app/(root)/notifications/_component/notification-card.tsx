@@ -1,5 +1,10 @@
+"use client";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../../../components/ui/avatar";
 
 import Link from "next/link";
 import {
@@ -7,8 +12,10 @@ import {
   getInitials,
   getNotificationType,
 } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 
 const NotificationCard = ({ notification }: { notification: any }) => {
+  const { user } = useUser();
   return (
     <Link href={`/post/${notification.reference_id}`}>
       <div className="p-4 hover:bg-slate-100/5 cursor-pointer rounded-xl mt-2 border-solid border-[1px]  border-slate-200/10">
@@ -24,7 +31,11 @@ const NotificationCard = ({ notification }: { notification: any }) => {
               </AvatarFallback>
             </Avatar>
           </div>
-          <p className="font-bold">{notification.publisher_name}</p>
+          <p className="font-bold">
+            {notification.publisher_id == user?.id!
+              ? "You"
+              : notification.publisher_name}
+          </p>
 
           <p className="">
             {getNotificationType(notification.notification_type)}

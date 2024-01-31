@@ -54,9 +54,39 @@ export async function createPost({
 export async function fetchPosts(userId: string) {
   try {
     let { data: posts, error } = await supabase.rpc(
-      "get_posts_with_author_details",
+      "get_posts_with_author_details_and_pagination",
       {
         check_user_id: userId,
+        page_limit: 2,
+        page_offset: 0,
+      },
+      {
+        count: "exact",
+      }
+    );
+
+    if (error) {
+      logError(error);
+      return [];
+    }
+    return posts;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function fetchPostsWithPagination(
+  userId: string,
+  page_limit: number,
+  page_offset: number
+) {
+  try {
+    let { data: posts, error } = await supabaseCacheFreeClient.rpc(
+      "get_posts_with_author_details_and_pagination",
+      {
+        check_user_id: userId,
+        page_limit: page_limit,
+        page_offset: page_offset,
       },
       {
         count: "exact",

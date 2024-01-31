@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import LikeButton from "@/components/common/like-button";
-import CommentButton from "@/components/ui/dashboard/comment-button";
+import CommentButton from "@/app/(root)/dashboard/_component/comment-button";
 import ShareButton from "@/components/common/share-button";
 import UserActivityCard from "@/components/common/user-activity-card";
 import { usePost } from "@/hooks/usePost";

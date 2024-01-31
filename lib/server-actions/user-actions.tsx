@@ -146,7 +146,6 @@ export async function fetchFollowStatus(
 }
 
 export async function fetchUsersByName(filter: string) {
-  console.log(filter);
   let { data: users, error } = await supabaseCacheFreeClient
     .from("user")
     .select("*")

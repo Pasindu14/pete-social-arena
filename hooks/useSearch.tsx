@@ -5,14 +5,13 @@ import { useState } from "react";
 
 export const useSearch = (param: string) => {
   const { user } = useUser();
-  const [search, setSearch] = useState<string>(param);
 
-  const filterPeopleSearch = async () => {
+  const filterPeopleSearch = async (search: string) => {
     const result = fetchUsersByName(search);
     return result;
   };
 
-  const filterPostsSearch = async () => {
+  const filterPostsSearch = async (search: string) => {
     const result = fetchPostsByStatus(search, user?.id!);
     return result;
   };

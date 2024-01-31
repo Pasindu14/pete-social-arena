@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "../button";
-import { BookmarkPlus } from "lucide-react";
+import { Button } from "../../../../components/ui/button";
+import { BookmarkPlus, Delete } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -17,7 +17,13 @@ import Dropzone from "react-dropzone";
 import { loaderColor, primaryColor } from "@/constants/colors";
 import { createPost } from "@/lib/server-actions/post-actions";
 import { getUserId } from "@/lib/utils";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../../../../components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PostValidation } from "@/lib/validation/post";
@@ -42,6 +48,10 @@ const AddPost = () => {
   const { startUpload } = useUploadThing("imageUploader", {
     onClientUploadComplete: () => {},
   });
+
+  const onRemoveClick = () => {
+    setFiles([]);
+  };
 
   async function onSubmit(values: z.infer<typeof PostValidation>) {
     try {
@@ -102,13 +112,34 @@ const AddPost = () => {
 
               {open && (
                 <div className="">
+                  {/* Files */}
+                  <div>
+                    {files && (
+                      <>
+                        {files.map((file) => {
+                          return (
+                            <div className="flex items-center justify-between gap-2 p-2 border border-1 border-gray-300 rounded-none">
+                              <div> {file.name} </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={onRemoveClick}
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </>
+                    )}
+                  </div>
+
                   <div
-                    className={`border border-${primaryColor} h-20 w-full flex items-center justify-center`}
+                    className={`border border-${primaryColor} h-20 w-full flex items-center justify-center mt-2`}
                   >
                     <Dropzone
                       onDrop={(acceptedFiles) => {
                         setFiles(acceptedFiles);
-                        console.log(acceptedFiles);
                       }}
                     >
                       {({ getRootProps, getInputProps }) => (

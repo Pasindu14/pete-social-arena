@@ -1,11 +1,11 @@
 "use client";
 import { LoaderFull } from "@/components/common/loader";
 import { Button } from "@/components/ui/button";
-import PeopleResultItem from "@/components/ui/search/people-result-item";
-import SearchResult from "@/components/ui/search/search-content";
+import PeopleResultItem from "@/app/(root)/search/_component/people-result-item";
+import SearchResult from "@/app/(root)/search/_component/search-content";
 import { Separator } from "@/components/ui/separator";
 import { primaryColor } from "@/constants/colors";
-import { searchSidebarItems } from "@/constants/search-sidebar";
+import { searchSidebarItems } from "@/constants/sidebar-contents";
 import { useSearch } from "@/hooks/useSearch";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -28,11 +28,10 @@ const Search = () => {
     setSelectedIndex(id);
 
     if (id === 1) {
-      const result = await filterPeopleSearch();
-      console.log(result);
+      const result = await filterPeopleSearch(search!);
       setData(result);
     } else if (id === 2) {
-      const result = await filterPostsSearch();
+      const result = await filterPostsSearch(search!);
       setData(result);
     }
 

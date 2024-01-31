@@ -50,7 +50,7 @@ export async function createNotification({
 
 export async function fetchNotificationsByUser(userId: string) {
   try {
-    let { data: comments, error } = await supabaseCacheFreeClient.rpc(
+    let { data: notifications, error } = await supabaseCacheFreeClient.rpc(
       "get_notifications_by_user",
       {
         ref_author_id: userId,
@@ -60,7 +60,7 @@ export async function fetchNotificationsByUser(userId: string) {
       logError(error);
       return [];
     }
-    return comments;
+    return notifications;
   } catch (error) {
     logError(error);
     return [];

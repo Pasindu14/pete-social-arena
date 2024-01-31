@@ -6,6 +6,11 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/common/header";
+import { Suspense } from "react";
+import { LoaderFull } from "@/components/common/loader";
+import { primaryColor } from "@/constants/colors";
+import Ads from "./dashboard/_component/ads";
+import MainSidebar from "@/components/common/main-sidebar";
 
 const heebo = Heebo({ subsets: ["latin"] });
 
@@ -31,17 +36,22 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="mt-4">
-              <Header
-                userId={user?.id!}
-                email={user?.emailAddresses[0]?.emailAddress!}
-                fullName={user?.firstName! + " " + user?.lastName!}
-                profilePictureUrl={user?.imageUrl!}
-                bio=""
-              />
-              {children}
-              {/*  <Footer /> */}
-            </div>
+            <Header
+              userId={user?.id!}
+              email={user?.emailAddresses[0]?.emailAddress!}
+              fullName={user?.firstName! + " " + user?.lastName!}
+              profilePictureUrl={user?.imageUrl!}
+              bio=""
+            />
+            <Suspense fallback={<LoaderFull size={20} color={primaryColor} />}>
+              <div className="md:flex min-h-screen">
+                <div className="hidden md:flex  basis-1/5  justify-center mt-4 px-2">
+                  <MainSidebar />
+                </div>
+                <div className="flex-1/2 container mx-auto">{children}</div>
+                <Ads />
+              </div>
+            </Suspense>
           </ThemeProvider>
           <Toaster />
         </body>

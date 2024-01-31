@@ -3,21 +3,26 @@
 import { primaryColor } from "@/constants/colors";
 import { MessageCircle } from "lucide-react";
 import React, { useState } from "react";
-import { Button } from "../button";
-import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "../dialog";
+import { Button } from "../../../../components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "../../../../components/ui/dialog";
 import Image from "next/image";
-import { Separator } from "../separator";
-import LikeButton from "../../common/like-button";
-import ShareButton from "../../common/share-button";
-import CommentForm from "../../common/comment-form";
-import UserActivityCard from "../../common/user-activity-card";
-import CommentsFeed from "../../common/comments-feed";
-import { Loader } from "../../common/loader";
+import { Separator } from "../../../../components/ui/separator";
+import LikeButton from "../../../../components/common/like-button";
+import ShareButton from "../../../../components/common/share-button";
+import CommentForm from "../../../../components/common/comment-form";
+import UserActivityCard from "../../../../components/common/user-activity-card";
+import CommentsFeed from "../../../../components/common/comments-feed";
+import { Loader } from "../../../../components/common/loader";
 
 import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 import { Comment } from "@/lib/models/comment.model";
 import toast from "react-hot-toast";
-import CommentButtonInDialog from "../../common/comment-buttonIn-dialog";
+import CommentButtonInDialog from "../../../../components/common/comment-buttonIn-dialog";
 
 const CommentButton = ({
   post,
