@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { fetchPostsWithPagination } from "@/lib/server-actions/post-actions";
 import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
-import { Loader } from "@/components/common/loader";
+
 import { loaderColor } from "@/constants/colors";
+import { Loader } from "@/components/common/loader";
 
 type FeedProps = {
   posts: any;

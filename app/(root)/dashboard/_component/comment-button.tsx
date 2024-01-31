@@ -17,12 +17,12 @@ import ShareButton from "../../../../components/common/share-button";
 import CommentForm from "../../../../components/common/comment-form";
 import UserActivityCard from "../../../../components/common/user-activity-card";
 import CommentsFeed from "../../../../components/common/comments-feed";
-import { Loader } from "../../../../components/common/loader";
 
 import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 import { Comment } from "@/lib/models/comment.model";
 import toast from "react-hot-toast";
 import CommentButtonInDialog from "../../../../components/common/comment-buttonIn-dialog";
+import { Loader } from "@/components/common/loader";
 
 const CommentButton = ({
   post,
