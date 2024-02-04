@@ -2,7 +2,6 @@
 
 import { supabase, supabaseCacheFreeClient } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
-import { logError } from "../logger";
 import { revalidatePath } from "next/cache";
 
 export async function updateUser(
@@ -27,7 +26,6 @@ export async function updateUser(
       ])
       .select();
     if (error != null) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -58,7 +56,6 @@ export async function getUserDetails(
       .maybeSingle();
 
     if (error != null) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong while fetching user details. Please try again!`,
         error.message
@@ -70,7 +67,6 @@ export async function getUserDetails(
       data
     );
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong while fetching user details. Please try again! `,
       error.message
@@ -92,7 +88,6 @@ export async function updateFollowers(
     });
 
     if (error) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -101,7 +96,6 @@ export async function updateFollowers(
     revalidatePath(`/profile/${followerId}`);
     revalidatePath(`/profile/${targetUserId}`);
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error
@@ -125,7 +119,6 @@ export async function fetchFollowStatus(
     );
 
     if (error) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -137,7 +130,6 @@ export async function fetchFollowStatus(
       data.toString()
     );
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error
@@ -152,7 +144,6 @@ export async function fetchUsersByName(filter: string) {
     .ilike("full_name", `%${filter}%`);
 
   if (error != null) {
-    logError(error);
     return [];
   }
 
@@ -169,7 +160,6 @@ export async function updateBio(userId: string, bio: string) {
       .select();
 
     if (error) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -178,7 +168,6 @@ export async function updateBio(userId: string, bio: string) {
     revalidatePath(`/profile/${userId}`);
     return responseHandler.setSuccess("Bio updated successfully", data);
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error

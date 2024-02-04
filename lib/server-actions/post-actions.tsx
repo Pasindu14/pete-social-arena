@@ -2,7 +2,6 @@
 
 import { supabase, supabaseCacheFreeClient } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
-import { logError } from "../logger";
 import { revalidatePath } from "next/cache";
 
 interface PostParams {
@@ -34,7 +33,6 @@ export async function createPost({
       .select();
 
     if (error != null) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
@@ -43,7 +41,6 @@ export async function createPost({
     revalidatePath("/dashboard");
     return responseHandler.setSuccess("Successfully created the post");
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error.message
@@ -66,7 +63,6 @@ export async function fetchPosts(userId: string) {
     );
 
     if (error) {
-      logError(error);
       return [];
     }
     return posts;
@@ -94,7 +90,6 @@ export async function fetchPostsWithPagination(
     );
 
     if (error) {
-      logError(error);
       return [];
     }
     return posts;
@@ -109,7 +104,6 @@ export async function fetchPostsByUser(userId: string) {
       check_user_id: userId,
     });
     if (error) {
-      logError(error);
       return [];
     }
 
@@ -135,14 +129,12 @@ export async function addLikes(
       is_increment: is_increment,
     });
     if (error) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
       );
     }
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error
@@ -159,14 +151,12 @@ export async function addComments(postId: string, increment_by: number) {
     });
 
     if (error) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong. Please try again !`,
         error.message
       );
     }
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
       error
@@ -188,7 +178,6 @@ export async function fetchPostsByStatus(filter: string, userId: string) {
     );
 
     if (error) {
-      logError(error);
       return [];
     }
 
