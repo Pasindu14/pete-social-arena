@@ -72,7 +72,7 @@ export async function getUserDetails(
   } catch (error: any) {
     logError(error);
     return responseHandler.setError(
-      `Oops! Something went wrong while fetching user details. Please try again!`,
+      `Oops! Something went wrong while fetching user details. Please try again! `,
       error.message
     );
   }
