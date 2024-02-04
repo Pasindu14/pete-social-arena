@@ -11,11 +11,16 @@ export const searchSidebarItems = [
 
 export const mainSidebarItems = [
   {
-    title: "Profile",
+    title: "Dashboard",
     id: 1,
+  },
+
+  {
+    title: "Profile",
+    id: 2,
   },
   {
     title: "Notifications",
-    id: 2,
+    id: 3,
   },
 ];

@@ -13,8 +13,10 @@ const MainSidebar = () => {
   const sideBarOnClick = async (id: number) => {
     setSelectedIndex(id);
     if (id === 1) {
-      router.push(`/profile/${user?.id}`);
+      router.push("/dashboard");
     } else if (id === 2) {
+      router.push(`/profile/${user?.id}`);
+    } else if (id === 3) {
       router.push(`/notifications`);
     }
   };
