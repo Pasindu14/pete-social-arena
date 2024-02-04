@@ -2,7 +2,6 @@
 
 import { supabase, supabaseCacheFreeClient } from "@/utils/server";
 import ResponseHandler from "../models/response.model";
-import { logError } from "../logger";
 
 interface NotificationParams {
   notificationType: string;
@@ -30,7 +29,6 @@ export async function createNotification({
       .single();
 
     if (error != null) {
-      logError(error);
       return responseHandler.setError(
         `Oops! Something went wrong with the notification. Please try again!`,
         error.message
@@ -40,7 +38,6 @@ export async function createNotification({
       notification: data,
     });
   } catch (error: any) {
-    logError(error);
     return responseHandler.setError(
       `Oops! Something went wrong with the notification. Please try again!`,
       error.message
@@ -57,12 +54,10 @@ export async function fetchNotificationsByUser(userId: string) {
       }
     );
     if (error) {
-      logError(error);
       return [];
     }
     return notifications;
   } catch (error) {
-    logError(error);
     return [];
   }
 }
