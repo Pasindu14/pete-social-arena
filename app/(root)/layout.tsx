@@ -11,7 +11,7 @@ import { LoaderFull } from "@/components/common/loader";
 import { primaryColor } from "@/constants/colors";
 import Ads from "./dashboard/_component/ads";
 import MainSidebar from "@/components/common/main-sidebar";
-import Header from "@/components/common/header";
+import Header from "@/components/common/Header";
 
 const heebo = Heebo({ subsets: ["latin"] });
 

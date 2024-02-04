@@ -22,7 +22,7 @@ import { fetchCommentsByPost } from "@/lib/server-actions/comment-actions";
 import { Comment } from "@/lib/models/comment.model";
 import toast from "react-hot-toast";
 import CommentButtonInDialog from "../../../../components/common/comment-buttonIn-dialog";
-import { Loader } from "@/components/loader";
+import { Loader } from "@/components/common/loader";
 
 const CommentButton = ({
   post,
