@@ -46,7 +46,7 @@ export default async function RootLayout({
             />
             <Suspense fallback={<LoaderFull size={20} color={primaryColor} />}>
               <div className="md:flex min-h-screen">
-                <div className="hidden md:flex  basis-1/5  justify-center mt-4 px-2">
+                <div className="hidden md:flex  basis-1/5 justify-center mt-4 px-2">
                   <MainSidebar />
                 </div>
                 <div className="flex-1/2 container mx-auto">{children}</div>
