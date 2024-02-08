@@ -109,18 +109,17 @@ const Header = ({
         <AddPost />
       </div>
 
+      <Link href={`/notifications`}>
+        <div className="hover:bg-slate-200/10 p-4 rounded-full">
+          <BellRing />
+        </div>
+      </Link>
       <ClerkLoading>
         <Loader size={15} color={loaderColor} />
       </ClerkLoading>
       <ClerkLoaded>
         <UserButton />
       </ClerkLoaded>
-
-      <Link href={`/notifications`}>
-        <div className="hover:bg-slate-200/10 p-4 rounded-full">
-          <BellRing />
-        </div>
-      </Link>
     </div>
   );
 };

@@ -19,7 +19,7 @@ export async function createPost({
 }: PostParams) {
   const responseHandler = new ResponseHandler<any>();
   try {
-    const { error } = await supabase
+    const { error } = await supabaseCacheFreeClient
       .from("post")
       .insert([
         {
@@ -38,11 +38,36 @@ export async function createPost({
         error.message
       );
     }
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard", "page");
     return responseHandler.setSuccess("Successfully created the post");
   } catch (error: any) {
     return responseHandler.setError(
       `Oops! Something went wrong. Please try again !`,
+      error.message
+    );
+  }
+}
+
+export async function removePost(postId: string) {
+  const responseHandler = new ResponseHandler<any>();
+  try {
+    const { error } = await supabaseCacheFreeClient
+      .from("post")
+      .delete()
+      .eq("id", postId);
+
+    if (error != null) {
+      return responseHandler.setError(
+        `Oops! Something went wrong while trying to remove the post.`,
+        error.message
+      );
+    }
+
+    revalidatePath("/dashboard");
+    return responseHandler.setSuccess("Successfully removed the post");
+  } catch (error: any) {
+    return responseHandler.setError(
+      `Oops! Something went wrong while trying to remove the post.`,
       error.message
     );
   }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Heebo } from "next/font/google";
+import { Cabin, Cabin_Condensed, Heebo } from "next/font/google";
 import "../globals.css";
 import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -11,9 +11,9 @@ import { LoaderFull } from "@/components/common/loader";
 import { primaryColor } from "@/constants/colors";
 import Ads from "./dashboard/_component/ads";
 import MainSidebar from "@/components/common/main-sidebar";
-import Header from "@/components/common/Header";
+import Header from "@/components/common/header";
 
-const heebo = Heebo({ subsets: ["latin"] });
+const heebo = Cabin({ weight: "400", subsets: ["latin-ext"] });
 
 export const metadata: Metadata = {
   title: "Pete's Social Arena",

@@ -23,6 +23,7 @@ export function PostItem(postParam: Post) {
               profile_picture_url={post.profile_picture_url}
               postDate={post.postDate}
               user={post.author}
+              postId={post.postId}
             />
             <Separator className="my-4 bg-white " />
             {/*    image and status showing up here */}
